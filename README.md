@@ -8,6 +8,11 @@ Site institucional da Matos de Melo Advocacia, escritório de advocacia tributá
 - `gerador/gerar_site.py` gera todas as páginas de `site-novo/` (textos, dados estruturados, sitemap e `llms.txt`).
 - `PROXIMOS-PASSOS.md` traz a publicação e as ações fora do site (Google, Bing, avaliações).
 
+## Publicar
+
+- **Vercel:** importe este repositório. O `vercel.json` já indica que o site está em `site-novo/` e que não há build. Cada `git push` na `main` publica uma nova versão.
+- **HostGator:** envie o conteúdo de `site-novo/` para o `public_html`. O `.htaccess` cuida dos redirecionamentos.
+
 ## Alterar textos
 
 Edite `gerador/gerar_site.py` e rode:
