@@ -1,0 +1,349 @@
+{
+  "homePage": {
+    "featuredArticleSlug": "holding-familiar-vs-testamento",
+    "differentiators": [
+      {
+        "icon": "fas fa-brain",
+        "title": "Visão Estratégica",
+        "description": "Analisamos cada caso sob uma ótica empresarial, não apenas jurídica, para entregar soluções que geram valor real ao seu negócio e patrimônio."
+      },
+      {
+        "icon": "fas fa-user-tie",
+        "title": "Atuação Personalizada",
+        "description": "Você é atendido diretamente pelo sócio-fundador, garantindo um nível sênior de atenção e expertise em todas as etapas do seu projeto."
+      },
+      {
+        "icon": "fas fa-gavel",
+        "title": "Foco em Resultados",
+        "description": "Nossa abordagem é orientada para a eficiência, buscando a resolução de litígios e a estruturação de negócios de forma ágil e objetiva."
+      }
+    ],
+    "caseStudies": [
+      {
+        "category": "Holding Familiar",
+        "title": "Transição de Gestão em Grupo Industrial",
+        "challenge": "Empresa familiar com potencial de conflito entre herdeiros e um considerável ônus tributário em um futuro processo de inventário.",
+        "solution": "Estruturação de uma holding familiar e um Acordo de Sócios detalhado para definir a governança e as regras de sucessão.",
+        "result": "Proporcionou uma relevante otimização tributária e estabeleceu uma transição de gestão clara e pacificada entre os sucessores."
+      },
+      {
+        "category": "Direito Tributário",
+        "title": "Questão Envolvendo Execução Fiscal",
+        "challenge": "Grupo logístico com a continuidade de suas operações em risco devido a uma execução fiscal de alto valor.",
+        "solution": "Atuação técnica perante os Tribunais, com apresentação de teses jurídicas pertinentes, seguida de reestruturação do passivo remanescente.",
+        "result": "Obteve-se êxito na questão judicial, com a consequente preservação da saúde financeira da empresa e recuperação de créditos."
+      },
+      {
+        "category": "Direito Societário",
+        "title": "Mediação de Impasse Societário",
+        "challenge": "Sociedade empresária com impasse entre sócios com igual participação, paralisando decisões estratégicas.",
+        "solution": "Condução de um processo de mediação com a reestruturação do Acordo de Sócios, prevendo mecanismos para a resolução de futuros impasses.",
+        "result": "Superação do impasse de forma célere, com a preservação da sociedade e a retomada das atividades de crescimento."
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "id": "testimonial-01",
+      "text": "A Matos de Melo Advocacia se destacou na área de direito tributário e patrimonial, proporcionando segurança jurídica e solidez ao futuro da nossa empresa familiar.",
+      "author": "J. S., CEO de Indústria Metalúrgica"
+    },
+    {
+      "id": "testimonial-02",
+      "text": "Com precisão técnica e eficiência exemplar, a equipe de Matos de Melo reverteu nosso impasse tributário; recomendamos sem reservas seus serviços.",
+      "author": "M. O., Diretora Financeira de Varejo"
+    },
+    {
+      "id": "testimonial-03",
+      "text": "O planejamento sucessório estruturado via Holding Familiar trouxe tranquilidade e garantiu a perpetuidade do nosso patrimônio — atuação impecável!",
+      "author": "A. C., Fundador de Grupo Varejista"
+    },
+    {
+      "id": "testimonial-04",
+      "text": "Através do processo de Recuperação Judicial conduzido pelo escritório, conseguimos reorganizar a empresa, preservar empregos e voltar a crescer. Foram essenciais.",
+      "author": "C. L., Diretor Industrial, Indústria Têxtil"
+    },
+    {
+      "id": "testimonial-05",
+      "text": "A negociação estratégica de nosso passivo bancário foi um divisor de águas. Evitamos a perda de ativos e ganhamos fôlego para reestruturar a operação.",
+      "author": "F. P., Sócio, Rede de Clínicas"
+    }
+  ],
+  "articles": {
+    "holding-familiar-vs-testamento": {
+      "slug": "holding-familiar-vs-testamento",
+      "title": "Holding Familiar vs. Testamento: O Guia Definitivo",
+      "category": "Planejamento Sucessório",
+      "keywords": ["holding familiar", "testamento", "planejamento sucessório", "inventário", "economia itcmd"],
+      "featuredImage": "images/homem-fazendo-seu-proximo-movimento.jpg",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "O planejamento sucessório é um passo crucial para proteger os bens construídos ao longo de uma vida e evitar conflitos futuros. Embora o testamento seja uma ferramenta tradicional, a Holding Familiar surge como uma solução moderna, que oferece mais agilidade, governança e, principalmente, economia tributária."
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/8293739/pexels-photo-8293739.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Mão entregando chaves sobre documentos de propriedade."
+        },
+        {
+          "type": "heading",
+          "value": "As Limitações e Custos do Testamento"
+        },
+        {
+          "type": "paragraph",
+          "value": "O testamento é um documento que apenas direciona como o inventário deverá ocorrer. Ele não evita o processo de inventário, que é conhecido por ser:"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Lento e Burocrático:</strong> O processo de inventário judicial pode levar anos para ser concluído, deixando o patrimônio 'congelado' e indisponível.",
+            "<strong>Oneroso:</strong> Envolve altos custos com o ITCMD, que incide sobre o valor de mercado dos bens, além de honorários advocatícios e custas judiciais.",
+            "<strong>Público:</strong> O inventário é um processo público, expondo os detalhes do patrimônio familiar a terceiros."
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "As Vantagens Estratégicas da Holding Familiar"
+        },
+        {
+          "type": "paragraph",
+          "value": "A Holding Familiar é uma empresa criada para administrar o patrimônio da família. Os bens são transferidos para essa pessoa jurídica, e os herdeiros recebem quotas da empresa, um processo que traz benefícios incomparáveis:"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Transferência em Vida com Controle Total:</strong> As quotas podem ser doadas aos herdeiros em vida, com cláusulas de usufruto vitalício para o patriarca, que continua administrando tudo.",
+            "<strong>Economia Tributária Substancial:</strong> O ITCMD na doação de quotas pode ser calculado sobre o valor contábil dos bens, que é muito menor que o valor de mercado, gerando uma economia significativa.",
+            "<strong>Gestão Contínua e Sem Interrupções:</strong> Em caso de falecimento, a gestão dos negócios continua normalmente, sem necessidade de alvarás judiciais.",
+            "<strong>Governança Robusta:</strong> O contrato social da Holding define regras claras sobre sucessão, distribuição de lucros e resolução de conflitos, evitando disputas."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "value": "Enquanto o testamento funciona como um mapa para a divisão, a Holding Familiar é a arquitetura completa que estrutura seu legado de forma integrada, segura e econômica."
+        }
+      ]
+    },
+    "erros-fatais-sucessao-empresas-familiares": {
+      "slug": "erros-fatais-sucessao-empresas-familiares",
+      "title": "3 Erros Fatais na Sucessão de Empresas Familiares",
+      "category": "Direito Empresarial",
+      "keywords": ["sucessão familiar", "empresa familiar", "acordo de sócios", "direito empresarial"],
+      "featuredImage": "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "Uma sucessão mal planejada é a principal causa de mortalidade de empresas familiares. Muitas vezes, décadas de trabalho são perdidas por falhas que poderiam ser facilmente evitadas com a orientação jurídica correta. Conheça os deslizes mais perigosos:"
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Equipe de negócios em reunião estratégica."
+        },
+        {
+          "type": "heading",
+          "value": "1. Confiar em Acordos Verbais e na Informalidade"
+        },
+        {
+          "type": "paragraph",
+          "value": "O maior erro é acreditar que 'na nossa família é diferente'. Acordos verbais sobre a entrada de herdeiros, critérios de avaliação da empresa e divisão de poder não têm validade jurídica. Sem um Acordo de Sócios bem documentado, a empresa fica vulnerável a disputas intermináveis no futuro."
+        },
+        {
+          "type": "heading",
+          "value": "2. Misturar os Papéis: Propriedade, Gestão e Família"
+        },
+        {
+          "type": "paragraph",
+          "value": "É fundamental separar os papéis. Quem é dono (proprietário), quem administra o dia a dia (gestor) e quem é apenas membro da família? Quando essas funções se confundem, surgem conflitos de interesse, decisões baseadas em emoção e falta de profissionalismo, minando a saúde do negócio."
+        },
+        {
+          "type": "heading",
+          "value": "3. Ignorar o Planejamento Tributário da Sucessão"
+        },
+        {
+          "type": "paragraph",
+          "value": "Adiar a sucessão esperando o inevitável significa deixar para os herdeiros uma conta altíssima de ITCMD, calculado sobre o valor de mercado da empresa no momento do inventário. Estruturas como a Holding Familiar permitem antecipar a transferência com uma carga tributária drasticamente reduzida."
+        },
+        {
+          "type": "paragraph",
+          "value": "A solução é construir uma arquitetura jurídica sólida através de ferramentas como a Holding Familiar e o Acordo de Sócios. Esses instrumentos definem as regras do jogo, protegem o patrimônio e garantem uma transição de poder suave e profissional."
+        }
+      ]
+    },
+    "desmistificando-a-protecao-patrimonial": {
+      "slug": "desmistificando-a-protecao-patrimonial",
+      "title": "Proteção Patrimonial: Não é Blindagem, é Governança",
+      "category": "Direito Patrimonial",
+      "keywords": ["proteção patrimonial", "blindagem patrimonial", "risco empresarial", "direito tributário"],
+      "featuredImage": "https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "O termo 'blindagem patrimonial' é frequentemente usado de forma equivocada, sugerindo manobras para ocultar bens. Na realidade, a verdadeira Proteção Patrimonial é um conjunto de estratégias jurídicas lícitas para organizar seus ativos e mitigar riscos futuros."
+        },
+        {
+          "type": "heading",
+          "value": "O Que Não é Proteção Patrimonial"
+        },
+        {
+          "type": "list",
+          "value": [
+            "Não é transferir bens para 'laranjas'.",
+            "Não é criar empresas de fachada para fugir de credores.",
+            "Não é uma forma de sonegar impostos."
+          ]
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/6077405/pexels-photo-6077405.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Balança da justiça sobre livros de direito."
+        },
+        {
+          "type": "heading",
+          "value": "O Que é Proteção Patrimonial Estratégica"
+        },
+        {
+          "type": "paragraph",
+          "value": "Trata-se de um planejamento sofisticado que visa separar o patrimônio pessoal dos riscos da atividade empresarial. Isso é feito por meio de:"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Holding Familiar:</strong> Centraliza a gestão dos bens e define regras claras sobre sucessão, protegendo o patrimônio de disputas e dívidas futuras.",
+            "<strong>Reestruturação Societária:</strong> Adequa o tipo de sociedade (LTDA, S/A) para limitar a responsabilidade dos sócios ao capital social.",
+            "<strong>Doações com Cláusulas de Proteção:</strong> Doar quotas com cláusulas de impenhorabilidade, inalienabilidade e incomunicabilidade garante que o patrimônio não seja perdido por dívidas ou em divórcios dos herdeiros."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "value": "Investir em proteção patrimonial não é sobre esconder, mas sobre organizar. É uma medida de governança e inteligência para garantir que o patrimônio que você construiu sirva ao seu propósito original: dar segurança e prosperidade à sua família."
+        }
+      ]
+    },
+    "acordo-de-socios-o-documento-vital": {
+      "slug": "acordo-de-socios-o-documento-vital",
+      "title": "Acordo de Sócios: O Documento que Pode Salvar sua Empresa",
+      "category": "Direito Empresarial",
+      "keywords": ["acordo de sócios", "governança corporativa", "sociedade empresarial", "conflito societário"],
+      "featuredImage": "https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "Muitos empreendedores iniciam uma sociedade com grande entusiasmo, mas poucos se preparam para os desafios futuros. O Acordo de Sócios (ou Acordo de Acionistas) é o instrumento jurídico mais importante para garantir a estabilidade e a longevidade de uma empresa."
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/327540/pexels-photo-327540.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Close-up de um contrato sendo assinado."
+        },
+        {
+          "type": "heading",
+          "value": "O que um Bom Acordo de Sócios Deve Conter?"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Regras de Governança:</strong> Como as decisões serão tomadas? Qual o quórum para decisões críticas?",
+            "<strong>Entrada e Saída de Sócios:</strong> Em que condições um novo sócio pode entrar? Como será a saída de um sócio, seja por vontade própria, morte ou exclusão?",
+            "<strong>Apuração de Haveres:</strong> Como o valor da participação de um sócio que está saindo será calculado para evitar disputas?",
+            "<strong>Mecanismos de Resolução de Impasses:</strong> O que acontece se os sócios não concordarem? (Ex: mediação, voto de minerva, etc.).",
+            "<strong>Direito de Preferência e Tag Along:</strong> Proteções para os sócios em caso de venda de participações."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "value": "Não ter um Acordo de Sócios é como navegar em um navio sem um mapa. No primeiro sinal de tempestade, o risco de naufrágio é iminente. Proteja sua sociedade, seu patrimônio e suas relações."
+        }
+      ]
+    },
+    "recuperacao-creditos-tributarios": {
+      "slug": "recuperacao-creditos-tributarios",
+      "title": "Sua Empresa Pode Ter Dinheiro a Receber do Fisco",
+      "category": "Direito Tributário",
+      "keywords": ["recuperação de créditos", "crédito tributário", "planejamento tributário", "impostos"],
+      "featuredImage": "https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "A complexa legislação tributária brasileira faz com que muitas empresas paguem impostos a mais sem perceber. A Recuperação de Créditos Tributários é um processo legal que permite identificar e reaver esses valores pagos indevidamente nos últimos 5 anos."
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/210574/pexels-photo-210574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Símbolo de porcentagem em papel representando otimização fiscal."
+        },
+        {
+          "type": "heading",
+          "value": "Como Funciona o Processo?"
+        },
+        {
+          "type": "paragraph",
+          "value": "O processo começa com um diagnóstico detalhado das apurações fiscais da empresa. Uma vez identificado um crédito, ele pode ser recuperado administrativamente, via compensação com débitos futuros, ou judicialmente, via precatório ou RPV. É um procedimento seguro e que pode representar um reforço de caixa significativo para o negócio."
+        }
+      ]
+    },
+    "recuperacao-judicial-ferramenta-estrategica": {
+      "slug": "recuperacao-judicial-ferramenta-estratégica",
+      "title": "Recuperação Judicial: Uma Ferramenta Estratégica",
+      "category": "Direito Empresarial",
+      "keywords": ["recuperação judicial", "crise empresarial", "reestruturação de dívidas", "continuidade"],
+      "featuredImage": "https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "Longe de ser um sinal de fracasso, a Recuperação Judicial (RJ) é um instrumento legal sofisticado, projetado para permitir que empresas viáveis superem crises financeiras temporárias, preservem empregos e mantenham sua função social."
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Martelo de juiz sobre mesa de tribunal."
+        },
+        {
+          "type": "heading",
+          "value": "Principais Benefícios da RJ"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Suspensão das Ações e Execuções:</strong> Por um período de 180 dias (stay period), todas as ações de cobrança e execuções contra a empresa são suspensas, dando o fôlego necessário para negociar.",
+            "<strong>Negociação Facilitada com Credores:</strong> A lei cria um ambiente para negociar um plano de pagamento que seja realista para a empresa e aceitável para a maioria dos credores.",
+            "<strong>Manutenção da Atividade:</strong> A empresa continua operando, faturando e buscando novos negócios, sob a supervisão de um administrador judicial.",
+            "<strong>Preservação de Ativos:</strong> Protege os ativos essenciais da empresa de serem penhorados ou vendidos para pagar dívidas de forma desordenada."
+          ]
+        }
+      ]
+    },
+    "tribunais-superiores-o-jogo-de-xadrez": {
+      "slug": "tribunais-superiores-o-jogo-de-xadrez",
+      "title": "Atuação nos Tribunais Superiores: O Jogo de Xadrez do Direito",
+      "category": "Direito Empresarial",
+      "keywords": ["STJ", "STF", "recurso especial", "recurso extraordinário", "contencioso estratégico"],
+      "featuredImage": "https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "content": [
+        {
+          "type": "paragraph",
+          "value": "Atingir os Tribunais Superiores em Brasília — o Superior Tribunal de Justiça (STJ) e o Supremo Tribunal Federal (STF) — representa o ápice da estratégia jurídica. Diferente das instâncias ordinárias, onde se discutem fatos e provas, aqui o debate é puramente sobre o direito."
+        },
+        {
+          "type": "image",
+          "url": "https://images.pexels.com/photos/122107/pexels-photo-122107.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "alt": "Peças de xadrez em um tabuleiro."
+        },
+        {
+          "type": "heading",
+          "value": "Por que a Atuação Especializada é Vital?"
+        },
+        {
+          "type": "list",
+          "value": [
+            "<strong>Admissibilidade do Recurso:</strong> A maioria dos recursos é barrada antes mesmo de ser analisada, por não cumprir os rigorosos requisitos técnicos de admissibilidade. Um especialista sabe como 'abrir a porta' do tribunal.",
+            "<strong>Teses de Repercussão Geral:</strong> Uma vitória no STF em um caso com repercussão geral pode impactar todo o ordenamento jurídico e beneficiar um setor inteiro, não apenas uma empresa.",
+            "<strong>Formação de Precedentes:</strong> Atuar nos tribunais superiores é uma oportunidade de moldar o direito, criando precedentes que servirão de guia para casos futuros em todo o país.",
+            "<strong>Sustentação Oral:</strong> A capacidade de defender a tese de forma concisa e persuasiva perante os ministros pode ser o fator decisivo em um julgamento."
+          ]
+        }
+      ]
+    }
+  }
+}
