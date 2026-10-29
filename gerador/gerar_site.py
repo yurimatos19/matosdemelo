@@ -30,14 +30,16 @@ HOJE = date.today().isoformat()
 PUBLICACAO_ARTIGOS = "2025-10-03"
 
 ENDERECO = {
-    "predio": "Empresarial Carlos Pena Filho",
+    "predio": "Torre Carlos Pena Filho, Centro Empresarial Queiroz Galvão",
+    "predio_curto": "Torre Carlos Pena Filho",
+    "complexo": "Centro Empresarial Queiroz Galvão",
     "rua": "R. Padre Carapuceiro, 706, sala 401",
     "bairro": "Boa Viagem",
     "cidade": "Recife",
     "uf": "PE",
     "cep": "51020-280",
 }
-ENDERECO_TEXTO = "R. Padre Carapuceiro, 706, sala 401 — Empresarial Carlos Pena Filho, Boa Viagem, Recife-PE, 51020-280"
+ENDERECO_TEXTO = "R. Padre Carapuceiro, 706, sala 401 — Torre Carlos Pena Filho, Centro Empresarial Queiroz Galvão, Boa Viagem, Recife-PE, 51020-280"
 
 ORG_ID = URL + "/#escritorio"
 PESSOA_ID = URL + "/osvaldo-matos-de-melo-neto/#pessoa"
@@ -686,7 +688,7 @@ def home():
   </div>
   <figure class="hero-x-media">
     <img src="/assets/img/banner-escritorio-recife.webp" alt="Sala de reuniões da Matos de Melo Advocacia, em Boa Viagem, Recife" width="1920" height="960" fetchpriority="high">
-    <figcaption>Sala de reuniões, Empresarial Carlos Pena Filho</figcaption>
+    <figcaption>Sala de reuniões, Torre Carlos Pena Filho</figcaption>
   </figure>
 </section>
 
@@ -802,7 +804,7 @@ def home():
         <div><dt><i class="ph-light ph-phone" aria-hidden="true"></i>Contato</dt><dd><a href="{wa()}" target="_blank" rel="noopener">WhatsApp (81) 99299-2676</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></dd></div>
       </dl>
     </div>
-    <figure class="reveal-img" style="margin:0"><img src="/assets/img/escritorio-real-vertical.webp" alt="Sala de reuniões da Matos de Melo Advocacia no Empresarial Carlos Pena Filho, Boa Viagem" width="1200" height="1600" loading="lazy" style="aspect-ratio:4/5;object-fit:cover;width:100%"></figure>
+    <figure class="reveal-img" style="margin:0"><img src="/assets/img/escritorio-real-vertical.webp" alt="Sala de reuniões da Matos de Melo Advocacia na Torre Carlos Pena Filho, Boa Viagem" width="1200" height="1600" loading="lazy" style="aspect-ratio:4/5;object-fit:cover;width:100%"></figure>
   </div>
 </section>
 
@@ -1245,7 +1247,7 @@ def escritorio():
       <h2>Missão</h2>
       <p>Transformar desafios jurídicos em oportunidades de crescimento, garantindo a segurança e a continuidade do patrimônio dos clientes com uma advocacia ética, técnica e personalizada.</p>
     </div>
-    <img src="/assets/img/escritorio-real-vertical.webp" alt="Sala de reuniões da Matos de Melo Advocacia no Empresarial Carlos Pena Filho, Boa Viagem" width="1200" height="1600" loading="lazy">
+    <img src="/assets/img/escritorio-real-vertical.webp" alt="Sala de reuniões da Matos de Melo Advocacia na Torre Carlos Pena Filho, Boa Viagem" width="1200" height="1600" loading="lazy">
   </div>
 </section>
 <section class="section section-mist">
@@ -1259,13 +1261,7 @@ def escritorio():
     </div>
   </div>
 </section>
-<section class="section">
-  <div class="container narrow">
-    <h2>Onde estamos</h2>
-    <p>{ENDERECO_TEXTO}. Atendimento de segunda a sexta, das 9h às 18h, presencialmente ou por videoconferência.</p>
-    <iframe class="map" title="Mapa: Matos de Melo Advocacia" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=R.+Padre+Carapuceiro,+706,+Boa+Viagem,+Recife+-+PE,+51020-280&output=embed"></iframe>
-  </div>
-</section>
+{local_html()}
 {cta_band()}'''
     url = URL + caminho
     pagina(caminho, titulo="O Escritório | Matos de Melo Advocacia — Recife",
@@ -1321,52 +1317,115 @@ def advogado():
 # ===========================================================================
 # CONTATO
 # ===========================================================================
+def local_html():
+    """Bloco "Onde estamos": endereço, rotas, mapa e fotos do prédio (contato e o escritório)."""
+    from urllib.parse import quote
+    mapa_busca = quote(f"Centro Empresarial Queiroz Galvão, R. Padre Carapuceiro, 706, Boa Viagem, Recife - PE, {ENDERECO['cep']}")
+    endereco_copia = f"{ENDERECO['rua']}, {ENDERECO['predio_curto']}, {ENDERECO['bairro']}, Recife-PE, {ENDERECO['cep']}"
+    return f'''<section class="location" id="como-chegar">
+  <div class="container location-grid">
+    <div class="location-text">
+      <p class="kicker">Onde estamos</p>
+      <h2 class="reveal">{ENDERECO["predio_curto"]}</h2>
+      <p class="location-sub">{ENDERECO["complexo"]}</p>
+      <dl class="location-list">
+        <div><dt><i class="ph-light ph-map-pin" aria-hidden="true"></i>Endereço</dt><dd>{ENDERECO["rua"]}<br>{ENDERECO["bairro"]}, Recife-PE, CEP {ENDERECO["cep"]}</dd></div>
+        <div><dt><i class="ph-light ph-buildings" aria-hidden="true"></i>Prédio</dt><dd>{ENDERECO["predio_curto"]}, no {ENDERECO["complexo"]}</dd></div>
+        <div><dt><i class="ph-light ph-door-open" aria-hidden="true"></i>Sala</dt><dd>401</dd></div>
+        <div><dt><i class="ph-light ph-clock" aria-hidden="true"></i>Horário</dt><dd>Segunda a sexta, das 9h às 18h</dd></div>
+      </dl>
+      <div class="location-actions">
+        <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination={mapa_busca}" target="_blank" rel="noopener"><i class="ph-light ph-navigation-arrow" aria-hidden="true"></i> Traçar rota no Google Maps</a>
+        <a class="btn btn-ghost" href="https://waze.com/ul?q={mapa_busca}&navigate=yes" target="_blank" rel="noopener">Abrir no Waze</a>
+        <button type="button" class="copy-btn copy-light" data-copy="{endereco_copia}"><i class="ph-light ph-copy" aria-hidden="true"></i><span>Copiar endereço</span></button>
+      </div>
+    </div>
+    <div class="location-map">
+      <iframe title="Mapa: {ENDERECO["complexo"]}, Torre Carlos Pena Filho" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q={mapa_busca}&output=embed"></iframe>
+    </div>
+  </div>
+  <div class="container">
+    <div class="building-gallery">
+      <figure><img src="/assets/img/predio-placa.jpg" alt="Entrada da Torre Carlos Pena Filho, número 706, no Centro Empresarial Queiroz Galvão" width="272" height="182" loading="lazy"><figcaption>Entrada pela R. Padre Carapuceiro, 706</figcaption></figure>
+      <figure><img src="/assets/img/predio-torre.jpg" alt="Fachada da Torre Carlos Pena Filho vista de baixo" width="272" height="182" loading="lazy"><figcaption>Torre Carlos Pena Filho</figcaption></figure>
+      <figure><img src="/assets/img/predio-entrada.jpg" alt="Térreo envidraçado do Centro Empresarial Queiroz Galvão" width="272" height="182" loading="lazy"><figcaption>Térreo do Centro Empresarial</figcaption></figure>
+    </div>
+    <p class="photo-credit">Fotos do prédio: Fred Jordão</p>
+  </div>
+</section>'''
+
+
 def contato():
     caminho = "/contato/"
     trail = [INICIO, (caminho, "Contato")]
     corpo = page_hero(trail, "Fale com o escritório",
-                      "O primeiro passo para uma solução jurídica sob medida é uma conversa franca. Respondemos em horário comercial.",
+                      "Escolha o canal mais confortável para você. Atendemos em Boa Viagem, Recife, e por videoconferência para todo o Brasil.",
                       "/assets/img/banner-contato.webp") + f'''
-<section class="section">
-  <div class="container split" style="align-items:start">
-    <div>
-      <h2>Canais de contato</h2>
-      <dl class="facts">
-        <div><dt><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i>WhatsApp</dt><dd><a href="{wa()}" target="_blank" rel="noopener">(81) 99299-2676</a></dd></div>
-        <div><dt><i class="ph-light ph-phone" aria-hidden="true"></i>Telefone</dt><dd><a href="tel:{TELEFONE_LINK}">(81) 99299-2676</a></dd></div>
-        <div><dt><i class="ph-light ph-envelope-simple" aria-hidden="true"></i>E-mail</dt><dd><a href="mailto:{EMAIL}">{EMAIL}</a></dd></div>
-        <div><dt><i class="ph-light ph-map-pin" aria-hidden="true"></i>Endereço</dt><dd>{ENDERECO["predio"]}<br>{ENDERECO["rua"]}<br>{ENDERECO["bairro"]}, Recife-PE — {ENDERECO["cep"]}</dd></div>
-        <div><dt><i class="ph-light ph-clock" aria-hidden="true"></i>Horário</dt><dd>Segunda a sexta, das 9h às 18h</dd></div>
-      </dl>
-      <iframe class="map" title="Mapa: Matos de Melo Advocacia" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=R.+Padre+Carapuceiro,+706,+Boa+Viagem,+Recife+-+PE,+51020-280&output=embed"></iframe>
-    </div>
-    <div>
-      <h2>Agende uma conversa</h2>
-      <p class="form-hint">Ao enviar, abrimos o WhatsApp com sua mensagem pronta. Nenhum dado fica gravado no site.</p>
-      <form id="contact-form" class="form-grid">
-        <div class="field"><label for="name">Nome completo</label><input id="name" name="name" autocomplete="name" required></div>
-        <div class="field"><label for="company">Empresa (opcional)</label><input id="company" name="company" autocomplete="organization"></div>
-        <div class="field"><label for="interest">Assunto</label>
-          <select id="interest" name="interest" required>
-            <option value="">Selecione</option>
-            <option>Planejamento tributário</option>
-            <option>Recuperação de créditos tributários</option>
-            <option>Execução fiscal / dívida tributária</option>
-            <option>Reforma tributária</option>
-            <option>Holding familiar / sucessão</option>
-            <option>Direito empresarial / societário</option>
-            <option>Outro assunto</option>
-          </select></div>
-        <div class="field"><label for="message">Conte brevemente o seu caso</label><textarea id="message" name="message" rows="5" required></textarea></div>
-        <button class="btn" type="submit"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> Enviar pelo WhatsApp</button>
-        <p id="form-success" class="summary-box" hidden>Mensagem pronta! Se o WhatsApp não abriu, <a href="#" target="_blank" rel="noopener">clique aqui para continuar</a>.</p>
-      </form>
-    </div>
+<section class="section contact-channels-section">
+  <div class="container">
+    <div class="office-status" data-status><span class="dot" aria-hidden="true"></span><span data-status-text>Atendimento de segunda a sexta, das 9h às 18h</span></div>
+    <ul class="channels">
+      <li class="channel channel-main">
+        <i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i>
+        <p class="channel-label">WhatsApp</p>
+        <a class="channel-value" href="{wa()}" target="_blank" rel="noopener">(81) 99299-2676</a>
+        <p class="channel-note">O jeito mais rápido de agendar uma conversa.</p>
+        <a class="btn" href="{wa()}" target="_blank" rel="noopener"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> Abrir conversa</a>
+      </li>
+      <li class="channel">
+        <i class="ph-light ph-phone" aria-hidden="true"></i>
+        <p class="channel-label">Telefone</p>
+        <a class="channel-value" href="tel:{TELEFONE_LINK}">(81) 99299-2676</a>
+        <p class="channel-note">Ligações em horário comercial.</p>
+        <button type="button" class="copy-btn" data-copy="(81) 99299-2676"><i class="ph-light ph-copy" aria-hidden="true"></i><span>Copiar número</span></button>
+      </li>
+      <li class="channel">
+        <i class="ph-light ph-envelope-simple" aria-hidden="true"></i>
+        <p class="channel-label">E-mail</p>
+        <a class="channel-value channel-email" href="mailto:{EMAIL}">{EMAIL}</a>
+        <p class="channel-note">Para enviar documentos e informações mais detalhadas.</p>
+        <button type="button" class="copy-btn" data-copy="{EMAIL}"><i class="ph-light ph-copy" aria-hidden="true"></i><span>Copiar e-mail</span></button>
+      </li>
+    </ul>
   </div>
-</section>'''
+</section>
+
+<section class="section section-mist">
+  <div class="container contact-form-wrap">
+    <div>
+      <h2 class="reveal">Conte o seu caso</h2>
+      <p>Preencha os campos e sua mensagem abre pronta no WhatsApp do escritório. Nenhum dado fica gravado no site.</p>
+      <ol class="steps contact-steps">
+        <li><strong>Você envia a mensagem</strong> pelo WhatsApp, por telefone ou por e-mail.</li>
+        <li><strong>Agendamos uma conversa</strong> presencial em Boa Viagem ou por videoconferência.</li>
+        <li><strong>Você recebe o diagnóstico</strong> e a proposta de trabalho, com os próximos passos.</li>
+      </ol>
+    </div>
+    <form id="contact-form" class="form-grid contact-form">
+      <div class="field"><label for="name">Nome completo</label><input id="name" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="company">Empresa (opcional)</label><input id="company" name="company" autocomplete="organization"></div>
+      <div class="field"><label for="interest">Assunto</label>
+        <select id="interest" name="interest" required>
+          <option value="">Selecione</option>
+          <option>Planejamento tributário</option>
+          <option>Recuperação de créditos tributários</option>
+          <option>Execução fiscal / dívida tributária</option>
+          <option>Reforma tributária</option>
+          <option>Holding familiar / sucessão</option>
+          <option>Direito empresarial / societário</option>
+          <option>Outro assunto</option>
+        </select></div>
+      <div class="field"><label for="message">Conte brevemente o seu caso</label><textarea id="message" name="message" rows="5" required></textarea></div>
+      <button class="btn" type="submit"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> Enviar pelo WhatsApp</button>
+      <p id="form-success" class="summary-box" hidden>Mensagem pronta. Se o WhatsApp não abriu, <a href="#" target="_blank" rel="noopener">continue por aqui</a>.</p>
+    </form>
+  </div>
+</section>
+
+{local_html()}'''
     url = URL + caminho
     pagina(caminho, titulo="Contato | Matos de Melo Advocacia — Advogado Tributarista em Recife",
-           descricao=f"Fale com a {NOME}: WhatsApp (81) 99299-2676, {EMAIL}. R. Padre Carapuceiro, 706, sala 401, Boa Viagem, Recife-PE. Segunda a sexta, 9h às 18h.",
+           descricao=f"Fale com a {NOME}: WhatsApp (81) 99299-2676, {EMAIL}. Torre Carlos Pena Filho, sala 401, Centro Empresarial Queiroz Galvão, R. Padre Carapuceiro, 706, Boa Viagem, Recife-PE.",
            corpo=corpo, ld_extra=[breadcrumb_ld(trail, url),
                                   {"@type": "ContactPage", "@id": url + "#contato", "url": url, "about": {"@id": ORG_ID}}])
 

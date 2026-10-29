@@ -243,6 +243,35 @@
         });
     }
 
+    // Botões de copiar (telefone, e-mail, endereço)
+    document.querySelectorAll('[data-copy]').forEach(function (btn) {
+        var label = btn.querySelector('span'), original = label.textContent;
+        btn.addEventListener('click', function () {
+            var text = btn.dataset.copy;
+            var done = function () {
+                btn.classList.add('done'); label.textContent = 'Copiado';
+                setTimeout(function () { btn.classList.remove('done'); label.textContent = original; }, 2000);
+            };
+            if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { window.prompt('Copie:', text); });
+            else window.prompt('Copie:', text);
+        });
+    });
+
+    // Aberto agora? Calculado no horário de Recife (seg a sex, 9h às 18h)
+    var status = document.querySelector('[data-status]');
+    if (status) {
+        var parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Recife', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false })
+            .formatToParts(new Date()).reduce(function (o, p) { o[p.type] = p.value; return o; }, {});
+        var dia = parts.weekday, hora = (+parts.hour % 24) + (+parts.minute) / 60;
+        var util = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].indexOf(dia) >= 0;
+        var texto;
+        if (util && hora >= 9 && hora < 18) { status.classList.add('open'); texto = 'Aberto agora, até as 18h'; }
+        else if (util && hora < 9) texto = 'Fechado agora. Abrimos hoje às 9h';
+        else if (dia === 'Fri' || dia === 'Sat' || dia === 'Sun') texto = 'Fechado agora. Abrimos segunda-feira às 9h';
+        else texto = 'Fechado agora. Abrimos amanhã às 9h';
+        status.querySelector('[data-status-text]').textContent = texto + (status.classList.contains('open') ? '.' : '. Pelo WhatsApp, você pode deixar sua mensagem a qualquer hora.');
+    }
+
     // Formulário de contato -> mensagem pronta no WhatsApp
     var form = document.getElementById('contact-form');
     if (form) {
