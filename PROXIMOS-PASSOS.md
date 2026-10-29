@@ -6,10 +6,10 @@
 
 ## 2. Publicar (HostGator)
 1. Faça backup dos arquivos atuais do `public_html`.
-2. Envie **todo o conteúdo** da pasta `site-novo/` para o `public_html`, incluindo os arquivos ocultos `.htaccess`, `robots.txt`, `sitemap.xml` e `llms.txt`.
+2. Envie os arquivos do repositório para o `public_html`, sem a pasta `gerador/`, incluindo o arquivo oculto `.htaccess`, o `robots.txt`, o `sitemap.xml` e o `llms.txt`.
 3. Abra https://www.matosdemelo.com/ e teste algumas páginas e o botão do WhatsApp.
 
-Para alterar textos no futuro: edite `gerador/gerar_site.py` e rode `python3 gerador/gerar_site.py`. A pasta `site-novo/` é recriada a partir dele.
+Para alterar textos no futuro: edite `gerador/gerar_site.py` e rode `python3 gerador/gerar_site.py`. As páginas são recriadas a partir dele.
 
 ## 3. Fora do site (pesa muito para as IAs indicarem o escritório)
 As IAs recomendam quem aparece **em vários lugares confiáveis**, e não só quem tem um site bom.

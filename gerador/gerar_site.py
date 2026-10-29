@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Gera o site estático da Matos de Melo Advocacia na pasta ../site-novo.
+Gera o site estático da Matos de Melo Advocacia na raiz do repositório.
 
 Cada página vira um arquivo HTML real (uma URL própria), com título, descrição,
 dados estruturados (schema.org) e conteúdo legível sem JavaScript — é isso que
@@ -15,7 +15,7 @@ from datetime import date
 from html import escape
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAIDA = os.path.join(RAIZ, "site-novo")
+SAIDA = RAIZ
 
 URL = "https://www.matosdemelo.com"
 NOME = "Matos de Melo Advocacia"

@@ -1,16 +1,10 @@
-# Fotos originais em alta resolução (as versões otimizadas estão em site-novo/assets/img)
-/*.jpg
-/*.jpeg
-/*.png
-
-# Site antigo e materiais de trabalho
-/index.html
-/index-2.html
-/style.css
-*.zip
+# Arquivos de trabalho que não fazem parte do site publicado
+_arquivo-antigo/
 kit-visual/
+*.zip
 
 # Configuração local
 .claude/
+.vercel/
 .DS_Store
 __pycache__/

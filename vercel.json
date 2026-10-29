@@ -3,11 +3,9 @@
   "framework": null,
   "buildCommand": "",
   "installCommand": "",
-  "outputDirectory": "site-novo",
   "trailingSlash": true,
   "redirects": [
-    { "source": "/index-2.html", "destination": "/", "permanent": true },
-    { "source": "/index.html", "destination": "/", "permanent": true }
+    { "source": "/index-2.html", "destination": "/", "permanent": true }
   ],
   "headers": [
     {

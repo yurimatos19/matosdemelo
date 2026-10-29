@@ -2,16 +2,21 @@
 
 Site institucional da Matos de Melo Advocacia, escritório de advocacia tributária e empresarial em Recife (PE): https://www.matosdemelo.com
 
-## Pastas
+É um site estático: o `index.html` e as páginas ficam na raiz do repositório e não há build.
 
-- `site-novo/` é o site pronto para publicar: HTML estático, sem build. É o conteúdo que vai para o `public_html` da hospedagem.
-- `gerador/gerar_site.py` gera todas as páginas de `site-novo/` (textos, dados estruturados, sitemap e `llms.txt`).
+## Estrutura
+
+- `index.html` e as pastas de cada página (`contato/`, `o-escritorio/`, `artigos/`...) formam o site publicado.
+- `assets/` guarda o CSS, o JS e as imagens.
+- `robots.txt`, `sitemap.xml` e `llms.txt` são lidos por buscadores e assistentes de IA.
+- `gerador/gerar_site.py` gera todas as páginas a partir dos textos.
 - `PROXIMOS-PASSOS.md` traz a publicação e as ações fora do site (Google, Bing, avaliações).
 
 ## Publicar
 
-- **Vercel:** importe este repositório. O `vercel.json` já indica que o site está em `site-novo/` e que não há build. Cada `git push` na `main` publica uma nova versão.
-- **HostGator:** envie o conteúdo de `site-novo/` para o `public_html`. O `.htaccess` cuida dos redirecionamentos.
+- **Vercel:** importe o repositório sem alterar nada. Cada `git push` na `main` publica uma nova versão.
+- **GitHub Pages:** em Settings > Pages, escolha a branch `main` e a pasta `/ (root)`, e configure o domínio próprio `www.matosdemelo.com`. Os links do site partem da raiz do domínio, então é preciso usar o domínio próprio.
+- **HostGator:** envie os arquivos para o `public_html`, sem a pasta `gerador/`. O `.htaccess` cuida dos redirecionamentos.
 
 ## Alterar textos
 
@@ -21,12 +26,12 @@ Edite `gerador/gerar_site.py` e rode:
 python3 gerador/gerar_site.py
 ```
 
-Estilos e interações ficam em `site-novo/assets/site.css` e `site-novo/assets/site.js`.
+Estilos e interações ficam em `assets/site.css` e `assets/site.js`.
 
 ## Ver no computador
 
 ```bash
-python3 -m http.server 8765 --directory site-novo
+python3 -m http.server 8765
 ```
 
 Depois, abra http://localhost:8765.
