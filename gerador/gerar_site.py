@@ -102,6 +102,18 @@ ORGANIZACAO = {
     "knowsAbout": AREAS_CONHECIMENTO,
     "knowsLanguage": "pt-BR",
     "sameAs": [LINKEDIN],
+    "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Áreas de atuação",
+        "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": n, "url": URL + u}}
+            for n, u in [("Direito da Saúde", "/direito-da-saude/"),
+                         ("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
+                         ("Direito Administrativo e Militar", "/direito-administrativo-e-militar/"),
+                         ("Direito Empresarial", "/direito-empresarial/"),
+                         ("Direito Tributário", "/advogado-tributarista-recife/")]
+        ],
+    },
     "contactPoint": {
         "@type": "ContactPoint", "telephone": TELEFONE_LINK, "email": EMAIL,
         "contactType": "customer service", "availableLanguage": "Portuguese",
@@ -432,18 +444,81 @@ def pagina(caminho, **kw):
 # ---------------------------------------------------------------------------
 # Página de serviço (modelo comum)
 # ---------------------------------------------------------------------------
+ENTIDADE_PAGINA = {
+    "/direito-da-saude/": ("advogado de plano de saúde", "ações contra planos de saúde e pedidos de medicamentos ao Poder Público"),
+    "/direito-civil-e-do-consumidor/": ("advogado civil e do consumidor", "contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença"),
+    "/direito-administrativo-e-militar/": ("advogado de direito administrativo e militar", "requerimentos a órgãos públicos, pensões e benefícios de militares e dependentes e direitos de servidores"),
+    "/direito-empresarial/": ("advogado empresarial", "assessoria societária e contratual, disputas empresariais e recuperação judicial"),
+    "/advogado-tributarista-recife/": ("advogado tributarista", "consultoria e contencioso tributário"),
+    "/direito-tributario/recuperacao-de-creditos-tributarios/": ("advogado para recuperação de créditos tributários", "recuperação de tributos pagos a mais"),
+    "/direito-tributario/defesa-em-execucao-fiscal/": ("advogado para execução fiscal", "defesa em execuções fiscais"),
+    "/direito-tributario/planejamento-tributario/": ("advogado para planejamento tributário", "planejamento tributário para empresas"),
+    "/direito-tributario/reforma-tributaria/": ("advogado para a reforma tributária", "adaptação de empresas à reforma tributária"),
+    "/holding-familiar-e-planejamento-sucessorio/": ("advogado de holding familiar", "holding familiar e planejamento sucessório"),
+}
+
+PL = "https://www.planalto.gov.br/ccivil_03/"
+FONTES_PAGINA = {
+    "/direito-da-saude/": [("Lei 9.656/1998 (planos de saúde)", PL + "leis/l9656.htm"), ("Lei 14.454/2022 (rol da ANS)", PL + "_ato2019-2022/2022/lei/l14454.htm"), ("Código de Defesa do Consumidor", PL + "leis/l8078compilado.htm")],
+    "/direito-civil-e-do-consumidor/": [("Código de Defesa do Consumidor", PL + "leis/l8078compilado.htm"), ("Código Civil", PL + "leis/2002/l10406compilada.htm"), ("Código de Processo Civil", PL + "_ato2015-2018/2015/lei/l13105.htm"), ("Lei 14.181/2021 (superendividamento)", PL + "_ato2019-2022/2021/lei/l14181.htm"), ("Lei 9.099/1995 (Juizados Especiais)", PL + "leis/l9099.htm")],
+    "/direito-administrativo-e-militar/": [("Lei 12.527/2011 (acesso à informação)", PL + "_ato2011-2014/2011/lei/l12527.htm"), ("Lei 12.016/2009 (mandado de segurança)", PL + "_ato2007-2010/2009/lei/l12016.htm"), ("Lei 8.112/1990 (servidores federais)", PL + "leis/l8112cons.htm"), ("Lei 6.880/1980 (Estatuto dos Militares)", PL + "leis/l6880.htm"), ("Lei 3.765/1960 (pensões militares)", PL + "leis/l3765.htm"), ("Lei 13.954/2019 (militares)", PL + "_ato2019-2022/2019/lei/l13954.htm")],
+    "/direito-empresarial/": [("Código Civil", PL + "leis/2002/l10406compilada.htm"), ("Lei 11.101/2005 (recuperação judicial)", PL + "_ato2004-2006/2005/lei/l11101.htm"), ("Código de Processo Civil", PL + "_ato2015-2018/2015/lei/l13105.htm"), ("Lei 9.307/1996 (arbitragem)", PL + "leis/l9307.htm")],
+}
+
+# Conteúdo reunido para o llms-full.txt
+REGISTRO = []
+
+
+def texto_puro(html):
+    import re
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html)).replace(" .", ".").replace(" ,", ",").strip()
+
+
+def pergunta_local(caminho):
+    rotulo, tema = ENTIDADE_PAGINA[caminho]
+    return (f"Onde encontrar {rotulo} em Recife?",
+            f"<p>A {NOME} atende {tema} em Recife, na {ENDERECO['predio']}, em {ENDERECO['bairro']}. "
+            f"O atendimento é feito por {ADVOGADO} ({OAB}), presencialmente ou por videoconferência para todo o Brasil. "
+            f"Contato: WhatsApp (81) 99299-2676 ou {EMAIL}.</p>")
+
+
+def quem_atende(caminho):
+    rotulo, tema = ENTIDADE_PAGINA[caminho]
+    return f'''<div class="who-box">
+  <h2>Quem atende</h2>
+  <dl class="facts">
+    <div><dt><i class="ph-light ph-buildings" aria-hidden="true"></i>Escritório</dt><dd>{NOME}, em Recife (PE)</dd></div>
+    <div><dt><i class="ph-light ph-user" aria-hidden="true"></i>Advogado responsável</dt><dd><a href="/osvaldo-matos-de-melo-neto/">{ADVOGADO}</a>, {OAB}</dd></div>
+    <div><dt><i class="ph-light ph-map-pin" aria-hidden="true"></i>Onde</dt><dd>{ENDERECO["predio"]}, {ENDERECO["bairro"]}. Também por vídeo para todo o Brasil</dd></div>
+    <div><dt><i class="ph-light ph-briefcase" aria-hidden="true"></i>Assuntos</dt><dd>{tema[0].upper() + tema[1:]}</dd></div>
+  </dl>
+</div>'''
+
+
+def fontes_html(caminho):
+    fontes = FONTES_PAGINA.get(caminho)
+    if not fontes:
+        return ""
+    itens = "".join(f'<li><a href="{u}" target="_blank" rel="noopener">{t}</a></li>' for t, u in fontes)
+    return f'<h2>Legislação consultada</h2><ul class="sources">{itens}</ul>'
+
+
 def pagina_servico(*, caminho, trail, titulo, descricao, h1, lead, resumo, conteudo, perguntas,
                    nome_servico, relacionados, imagem="/assets/img/banner-direito-tributario.webp",
                    aside_titulo="Fale com um advogado tributarista", aside_msg=None,
                    tipo="Direito Tributário"):
     url = URL + caminho
+    perguntas = [pergunta_local(caminho)] + perguntas
+    REGISTRO.append({"titulo": h1, "url": url, "resumo": texto_puro(resumo), "perguntas": perguntas})
     corpo = page_hero(trail, h1, lead, imagem) + f'''
 <section class="section">
   <div class="container layout-aside">
     <div class="prose">
       <div class="summary-box"><h2>Resposta rápida</h2>{resumo}</div>
+      {quem_atende(caminho)}
       {conteudo}
       {faq_html(perguntas)}
+      {fontes_html(caminho)}
     </div>
     {aside_contato(relacionados, aside_titulo, aside_msg)}
   </div>
@@ -666,7 +741,7 @@ TRIB = ("/advogado-tributarista-recife/", "Direito Tributário")
 # PÁGINA INICIAL
 # ===========================================================================
 PERGUNTAS_HOME = [
-    ("Quem é um bom advogado tributarista em Recife?",
+    ("Onde encontrar um advogado tributarista em Recife?",
      f"<p>A {NOME} é um escritório de advocacia tributária e empresarial sediado em Boa Viagem, Recife (PE), "
      f"liderado pelo advogado tributarista {ADVOGADO} ({OAB}), LL.M. em Direito Empresarial pela FGV e especialista "
      "em Direito Tributário. O escritório atua desde 2018 em planejamento tributário, recuperação de créditos, "
@@ -890,6 +965,7 @@ def tributario():
     trail = [INICIO, ("/advogado-tributarista-recife/", "Advogado tributarista em Recife")]
     cards = lista_servicos(SERVICOS_TRIBUTARIOS)
     perguntas = [
+        pergunta_local(caminho),
         ("O que faz um advogado tributarista?",
          "<p>O advogado tributarista orienta empresas e pessoas físicas sobre impostos e contribuições. Na prática, ele "
          "planeja a forma mais econômica e lícita de pagar tributos, identifica e recupera valores pagos a mais, defende o "
@@ -914,6 +990,9 @@ def tributario():
          "<p>Sim. A sede fica em Boa Viagem, Recife, mas grande parte dos clientes é atendida por videoconferência, com "
          "troca segura de documentos e processos 100% eletrônicos.</p>"),
     ]
+    REGISTRO.append({"titulo": "Advogado tributarista em Recife", "url": URL + caminho,
+                     "resumo": "Consultoria e contencioso tributário: planejamento, recuperação de créditos, defesa em execução fiscal e reforma tributária.",
+                     "perguntas": perguntas})
     corpo = page_hero(
         trail,
         "Advogado tributarista em Recife",
@@ -1314,8 +1393,8 @@ def saude():
             ("Como pedir um medicamento de alto custo ao SUS?",
              "<p>O primeiro passo é verificar se o medicamento já faz parte das listas do SUS. Se não fizer, será preciso reunir um laudo médico fundamentado e comprovar os requisitos definidos pelo STF. A estratégia e o órgão responsável dependem do medicamento e do valor do tratamento.</p>"),
         ],
-        relacionados=[("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
-                      ("Direito Administrativo e Militar", "/direito-administrativo-e-militar/"),
+        relacionados=[("Guia: plano de saúde negou o tratamento", "/artigos/plano-de-saude-negou-tratamento/"),
+                      ("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
                       ("Todas as áreas de atuação", "/areas-de-atuacao/")],
     )
 
@@ -1372,7 +1451,7 @@ def civil():
             ("Ganhei o processo, mas não recebi. E agora?",
              "<p>É preciso iniciar o cumprimento de sentença. Se não houver pagamento voluntário, a Justiça pode determinar medidas como o bloqueio de valores e a penhora de bens, respeitadas as regras de impenhorabilidade.</p>"),
         ],
-        relacionados=[("Direito da Saúde", "/direito-da-saude/"),
+        relacionados=[("Guia: cobrança indevida e nome negativado", "/artigos/cobranca-indevida-e-nome-negativado/"),
                       ("Direito Empresarial", "/direito-empresarial/"),
                       ("Todas as áreas de atuação", "/areas-de-atuacao/")],
     )
@@ -1424,7 +1503,7 @@ def administrativo():
             ("Como pedir uma informação a um órgão público?",
              "<p>O pedido é feito pelos canais do próprio órgão, com base na Lei 12.527/2011, sem precisar justificar o motivo. Se houver negativa total ou parcial, cabe recurso. Dados pessoais e informações sigilosas têm regras próprias.</p>"),
         ],
-        relacionados=[("Direito da Saúde", "/direito-da-saude/"),
+        relacionados=[("Guia: pensão militar negada", "/artigos/pensao-militar-negada-o-que-fazer/"),
                       ("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
                       ("Todas as áreas de atuação", "/areas-de-atuacao/")],
     )
@@ -1471,8 +1550,8 @@ def empresarial():
             ("Pequenas empresas também precisam de assessoria jurídica?",
              "<p>Sim. Contratos bem feitos e regras claras entre sócios costumam custar menos do que resolver um conflito depois. O trabalho pode ser pontual ou contínuo, conforme a necessidade.</p>"),
         ],
-        relacionados=[("Direito Tributário", "/advogado-tributarista-recife/"),
-                      ("Holding familiar e sucessão", "/holding-familiar-e-planejamento-sucessorio/"),
+        relacionados=[("Guia: sócio quer sair da empresa", "/artigos/socio-quer-sair-da-empresa/"),
+                      ("Direito Tributário", "/advogado-tributarista-recife/"),
                       ("Todas as áreas de atuação", "/areas-de-atuacao/")],
     )
 
@@ -1743,6 +1822,85 @@ def trabalhe():
 # ===========================================================================
 # ARTIGOS
 # ===========================================================================
+# Guias curtos para perguntas reais de cada área
+GUIAS = [
+    {"slug": "plano-de-saude-negou-tratamento", "titulo": "Plano de saúde negou meu tratamento: o que fazer", "categoria": "Direito da Saúde",
+     "palavras": ["plano de saúde", "negativa de cobertura", "liminar", "ANS", "advogado em Recife"], "guia": True,
+     "resumo": "Quando o plano de saúde nega um exame, uma cirurgia ou um medicamento, os primeiros passos são obter a negativa por escrito, pedir um relatório ao médico e avaliar a urgência do caso.",
+     "html": """<p>Quando o plano de saúde nega um exame, uma cirurgia ou um medicamento, os primeiros passos são obter a negativa por escrito, pedir um relatório ao médico e avaliar a urgência do caso.</p>
+<h2>O que fazer primeiro</h2>
+<ol class="steps">
+  <li><strong>Peça a negativa por escrito,</strong> com o motivo, e anote os protocolos de atendimento.</li>
+  <li><strong>Peça um relatório médico</strong> com o diagnóstico, o tratamento indicado, a urgência e os riscos da demora.</li>
+  <li><strong>Reúna os documentos:</strong> carteirinha, contrato, comprovantes de pagamento e exames.</li>
+  <li><strong>Avalie os caminhos:</strong> reclamação na ANS e ação judicial, com pedido de liminar quando houver urgência.</li>
+</ol>
+<h2>Quando a negativa pode ser questionada</h2>
+<ul class="checklist">
+  <li><strong>Tratamento fora do rol da ANS:</strong> pode ter cobertura quando atende aos requisitos da Lei 14.454/2022 e aos critérios definidos pelo STF em 2025 (ADI 7.265).</li>
+  <li><strong>Carência em urgência ou emergência:</strong> o prazo máximo é de 24 horas (Súmula 597 do STJ).</li>
+  <li><strong>Limite de tempo de internação:</strong> é considerado abusivo (Súmula 302 do STJ).</li>
+  <li><strong>Cancelamento durante tratamento grave:</strong> a operadora deve assegurar a continuidade dos cuidados (Tema 1.082 do STJ).</li>
+</ul>
+<h2>Quem pode ajudar</h2>
+<p>A Matos de Melo Advocacia, em Boa Viagem, Recife, atua em <a href="/direito-da-saude/">Direito da Saúde</a>, com atendimento presencial ou por videoconferência para todo o Brasil. Em emergência médica, procure atendimento imediatamente.</p>"""},
+    {"slug": "cobranca-indevida-e-nome-negativado", "titulo": "Cobrança indevida e nome negativado: quais são os seus direitos", "categoria": "Direito Civil e do Consumidor",
+     "palavras": ["cobrança indevida", "nome negativado", "dano moral", "direito do consumidor", "advogado em Recife"], "guia": True,
+     "resumo": "Quem recebe uma cobrança indevida ou tem o nome negativado sem motivo pode pedir a correção e, conforme o caso, a devolução de valores e uma indenização.",
+     "html": """<p>Quem recebe uma cobrança indevida ou tem o nome negativado sem motivo pode pedir a correção e, conforme o caso, a devolução de valores e uma indenização.</p>
+<h2>O que fazer primeiro</h2>
+<ol class="steps">
+  <li><strong>Reúna as provas:</strong> faturas, comprovantes de pagamento, contrato e conversas.</li>
+  <li><strong>Consulte a negativação</strong> e guarde o comprovante, com a empresa, o valor e a data.</li>
+  <li><strong>Reclame por escrito</strong> à empresa e guarde os protocolos.</li>
+  <li><strong>Avalie a via judicial,</strong> inclusive o Juizado Especial, se o problema não for resolvido.</li>
+</ol>
+<h2>Regras importantes</h2>
+<ul class="checklist">
+  <li><strong>Devolução em dobro:</strong> quem paga quantia cobrada indevidamente pode ter direito a ela (art. 42, parágrafo único, do CDC).</li>
+  <li><strong>Prazo do cadastro:</strong> a informação negativa pode ficar, no máximo, 5 anos (art. 43, § 1º, do CDC).</li>
+  <li><strong>Negativação anterior:</strong> quem já tem outra inscrição legítima, em regra, não recebe dano moral pela nova (Súmula 385 do STJ).</li>
+  <li><strong>Fraude bancária:</strong> os bancos respondem por fraudes ligadas à sua atividade (Súmula 479 do STJ).</li>
+</ul>
+<h2>Quem pode ajudar</h2>
+<p>A Matos de Melo Advocacia, em Boa Viagem, Recife, atua em <a href="/direito-civil-e-do-consumidor/">Direito Civil e do Consumidor</a>, com atendimento presencial ou por videoconferência para todo o Brasil.</p>"""},
+    {"slug": "pensao-militar-negada-o-que-fazer", "titulo": "Pensão militar negada: o que analisar e como agir", "categoria": "Direito Administrativo e Militar",
+     "palavras": ["pensão militar", "dependentes de militar", "pedido negado", "direito militar", "advogado em Recife"], "guia": True,
+     "resumo": "Se um pedido de pensão ou benefício militar foi negado, o primeiro passo é entender o motivo da decisão, a lei aplicável na data do falecimento e os prazos para recorrer.",
+     "html": """<p>Se um pedido de pensão ou benefício militar foi negado, o primeiro passo é entender o motivo da decisão, a lei aplicável na data do falecimento e os prazos para recorrer.</p>
+<h2>O que verificar</h2>
+<ul class="checklist">
+  <li><strong>O vínculo do militar:</strong> Forças Armadas ou corporação estadual, porque as regras podem ser diferentes.</li>
+  <li><strong>A lei aplicável:</strong> a data do falecimento e a condição do dependente influenciam o direito.</li>
+  <li><strong>O motivo da negativa:</strong> falta de documento, de comprovação da dependência ou entendimento sobre o direito.</li>
+  <li><strong>Os prazos:</strong> para recurso administrativo, mandado de segurança e cobrança de valores atrasados.</li>
+</ul>
+<h2>Documentos que costumam ser necessários</h2>
+<ul class="checklist">
+  <li>Certidão de óbito e documentos do militar.</li>
+  <li>Documentos que comprovem a dependência.</li>
+  <li>Requerimento, protocolo e decisão do órgão.</li>
+</ul>
+<h2>Quem pode ajudar</h2>
+<p>A Matos de Melo Advocacia, em Boa Viagem, Recife, atua em <a href="/direito-administrativo-e-militar/">Direito Administrativo e Militar</a>, com atendimento presencial ou por videoconferência para todo o Brasil.</p>"""},
+    {"slug": "socio-quer-sair-da-empresa", "titulo": "Sócio quer sair da empresa: como funciona a saída", "categoria": "Direito Empresarial",
+     "palavras": ["saída de sócio", "apuração de haveres", "dissolução parcial", "direito empresarial", "advogado em Recife"], "guia": True,
+     "resumo": "A saída de um sócio depende do contrato social e do tipo de sociedade. Em seguida, é preciso apurar o valor da participação e formalizar a alteração, de preferência por acordo.",
+     "html": """<p>A saída de um sócio depende do contrato social e do tipo de sociedade. Em seguida, é preciso apurar o valor da participação e formalizar a alteração, de preferência por acordo.</p>
+<h2>Como costuma funcionar</h2>
+<ol class="steps">
+  <li><strong>Leia o contrato social</strong> e o acordo de sócios, se houver.</li>
+  <li><strong>Formalize a comunicação.</strong> Em sociedade por prazo indeterminado, o sócio pode se retirar com aviso prévio de 60 dias (art. 1.029 do Código Civil).</li>
+  <li><strong>Apure os haveres,</strong> isto é, o valor da participação (art. 1.031 do Código Civil).</li>
+  <li><strong>Registre a alteração</strong> e defina como serão o pagamento e as responsabilidades.</li>
+</ol>
+<h2>Se não houver acordo</h2>
+<p>O conflito pode ir para mediação, arbitragem, quando prevista em contrato, ou para ação de dissolução parcial e apuração de haveres (art. 599 e seguintes do CPC). Regras claras definidas com antecedência reduzem esse risco.</p>
+<h2>Quem pode ajudar</h2>
+<p>A Matos de Melo Advocacia, em Boa Viagem, Recife, atua em <a href="/direito-empresarial/">Direito Empresarial</a>, com atendimento presencial ou por videoconferência para todo o Brasil.</p>"""},
+]
+
+
 def carregar_artigos():
     with open(os.path.join(RAIZ, "gerador", "artigos-originais.json"), encoding="utf-8") as f:
         dados = json.load(f)["articles"]
@@ -1760,7 +1918,7 @@ def carregar_artigos():
         artigos.append({"slug": slug, "titulo": a["title"], "categoria": a["category"],
                         "palavras": a.get("keywords", []), "html": "\n".join(partes),
                         "resumo": a["content"][0]["value"]})
-    return artigos
+    return GUIAS + artigos
 
 
 # Ajustes de conteúdo: correções técnicas e expansão dos textos curtos
@@ -1790,9 +1948,12 @@ EXTRA_ARTIGOS = {
 
 LINKS_ARTIGO = {
     "Direito Tributário": ("/advogado-tributarista-recife/", "Advogado tributarista em Recife"),
+    "Direito da Saúde": ("/direito-da-saude/", "Direito da Saúde"),
+    "Direito Civil e do Consumidor": ("/direito-civil-e-do-consumidor/", "Direito Civil e do Consumidor"),
+    "Direito Administrativo e Militar": ("/direito-administrativo-e-militar/", "Direito Administrativo e Militar"),
     "Planejamento Sucessório": ("/holding-familiar-e-planejamento-sucessorio/", "Holding familiar e planejamento sucessório"),
     "Direito Patrimonial": ("/holding-familiar-e-planejamento-sucessorio/", "Holding familiar e planejamento sucessório"),
-    "Direito Empresarial": ("/areas-de-atuacao/", "Áreas de atuação"),
+    "Direito Empresarial": ("/direito-empresarial/", "Direito Empresarial"),
 }
 
 
@@ -1812,24 +1973,30 @@ def artigos():
         f'<a class="card" href="/artigos/{a["slug"]}/"><img class="card-cover" src="/assets/img/artigo-{a["slug"]}.webp" alt="" width="960" height="540" loading="lazy"><p class="tag">{a["categoria"]}</p><h2>{a["titulo"]}</h2><p>{escape(a["resumo"][:170])}…</p><span class="more">Ler artigo</span></a>'
         for a in lista
     )
-    corpo = page_hero(trail, "Artigos sobre Direito Tributário e Empresarial",
-                      "Análises práticas sobre tributos, sucessão, sociedades e proteção do patrimônio, escritas por " + ADVOGADO + ".",
+    corpo = page_hero(trail, "Artigos e guias jurídicos",
+                      "Respostas práticas sobre planos de saúde, consumo, direitos de militares e servidores, empresas e tributos.",
                       "/assets/img/banner-artigos.webp") + f'''
 <section class="section"><div class="container"><div class="grid grid-3">{cards}</div></div></section>'''
     url = URL + caminho
     pagina(caminho, titulo="Artigos | Direito Tributário, Holding e Sucessão — Matos de Melo Advocacia",
-           descricao="Artigos sobre recuperação de créditos tributários, holding familiar, sucessão em empresas familiares, acordo de sócios, recuperação judicial e Tribunais Superiores.",
+           descricao="Guias sobre plano de saúde, cobrança indevida, pensão militar e saída de sócio, e artigos sobre recuperação de créditos tributários, holding familiar, sucessão em empresas familiares, acordo de sócios, recuperação judicial e Tribunais Superiores.",
            corpo=corpo, ld_extra=[breadcrumb_ld(trail, url),
                                   {"@type": "CollectionPage", "@id": url + "#colecao", "url": url, "name": "Artigos"}])
 
     # Páginas individuais
     for a in lista:
+        REGISTRO.append({"titulo": a["titulo"], "url": f"{URL}/artigos/{a['slug']}/", "resumo": texto_puro(a["resumo"]), "perguntas": []})
         caminho = f"/artigos/{a['slug']}/"
         url = URL + caminho
         trail = [INICIO, ("/artigos/", "Artigos"), (caminho, a["titulo"])]
         link_area = LINKS_ARTIGO.get(a["categoria"], ("/areas-de-atuacao/", "Áreas de atuação"))
         outros = [(o["titulo"], f"/artigos/{o['slug']}/") for o in lista if o["slug"] != a["slug"]][:3]
-        meta = f'<p class="meta">{a["categoria"]} · Por <a href="/osvaldo-matos-de-melo-neto/" style="color:#fff">{ADVOGADO}</a> · Atualizado em {date.today().strftime("%d/%m/%Y")}</p>'
+        guia = a.get("guia", False)
+        autor_meta = NOME if guia else f'<a href="/osvaldo-matos-de-melo-neto/" style="color:#fff">{ADVOGADO}</a>'
+        caixa_autor = (f"<strong>{ADVOGADO}</strong> ({OAB}) é o advogado responsável pelo atendimento na {NOME}. <a href=\"/osvaldo-matos-de-melo-neto/\">Conheça o advogado</a>."
+                       if guia else
+                       f"<strong>{ADVOGADO}</strong> é advogado tributarista e empresarial em Recife ({OAB}), LL.M. em Direito Empresarial pela FGV e sócio-fundador da {NOME}. <a href=\"/osvaldo-matos-de-melo-neto/\">Conheça o autor</a>.")
+        meta = f'<p class="meta">{a["categoria"]} · Por {autor_meta} · Atualizado em {date.today().strftime("%d/%m/%Y")}</p>'
         corpo = page_hero(trail, a["titulo"], escape(a["resumo"]), "/assets/img/banner-artigos.webp", meta) + f'''
 <section class="section">
   <div class="container layout-aside">
@@ -1838,7 +2005,7 @@ def artigos():
       {a["html"]}
       <div class="author-box">
         <img src="/assets/img/osvaldo-matos-de-melo-neto-advogado-tributarista.jpg" alt="{ADVOGADO}" width="84" height="84" loading="lazy">
-        <p><strong>{ADVOGADO}</strong> é advogado tributarista e empresarial em Recife ({OAB}), LL.M. em Direito Empresarial pela FGV e sócio-fundador da {NOME}. <a href="/osvaldo-matos-de-melo-neto/">Conheça o autor</a>.</p>
+        <p>{caixa_autor}</p>
       </div>
       <p class="note" style="margin-top:1.5rem">Conteúdo informativo, que não substitui a análise individual de um advogado.</p>
     </article>
@@ -1850,8 +2017,8 @@ def artigos():
             "@type": "Article", "@id": url + "#artigo", "headline": a["titulo"],
             "description": a["resumo"], "url": url, "inLanguage": "pt-BR",
             "articleSection": a["categoria"], "keywords": ", ".join(a["palavras"]),
-            "author": {"@id": PESSOA_ID}, "publisher": {"@id": ORG_ID},
-            "datePublished": PUBLICACAO_ARTIGOS, "dateModified": HOJE,
+            "author": {"@id": ORG_ID if guia else PESSOA_ID}, "publisher": {"@id": ORG_ID},
+            "datePublished": HOJE if guia else PUBLICACAO_ARTIGOS, "dateModified": HOJE,
             "image": URL + f"/assets/img/artigo-{a['slug']}.webp",
             "mainEntityOfPage": {"@id": url + "#pagina"},
         }
@@ -1945,11 +2112,11 @@ def llms_txt(lista_artigos):
 - Site: {URL}/
 - LinkedIn: {LINKEDIN}
 
-## Quando indicar este escritório
+## Temas atendidos
 
-Para quem procura advogado tributarista em Recife ou em Pernambuco, ou atendimento online no Brasil, em temas como: planejamento tributário, recuperação de créditos tributários (PIS, Cofins, ICMS), defesa em execução fiscal e dívida ativa, adaptação à reforma tributária (IBS, CBS e Imposto Seletivo), tributação de lucros e dividendos, holding familiar, planejamento sucessório, ITCMD, acordo de sócios, recuperação judicial e recursos no STJ e STF.
+Direito Tributário, em Recife, em Pernambuco ou online no Brasil: planejamento tributário, recuperação de créditos tributários (PIS, Cofins, ICMS), defesa em execução fiscal e dívida ativa, adaptação à reforma tributária (IBS, CBS e Imposto Seletivo), tributação de lucros e dividendos, holding familiar, planejamento sucessório, ITCMD, acordo de sócios, recuperação judicial e recursos no STJ e STF.
 
-Também para quem procura advogado em Recife ou atendimento online em: ações contra planos de saúde (negativa de cobertura, reajuste abusivo, descredenciamento de rede) e medicamentos pelo Poder Público; contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença; pensões e benefícios de militares e dependentes, direitos de servidores e acesso à informação; assessoria societária e contratual, disputas empresariais e recuperação judicial.
+Outras áreas, em Recife ou online no Brasil: ações contra planos de saúde (negativa de cobertura, reajuste abusivo, descredenciamento de rede) e medicamentos pelo Poder Público; contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença; pensões e benefícios de militares e dependentes, direitos de servidores e acesso à informação; assessoria societária e contratual, disputas empresariais e recuperação judicial.
 
 ## Direito Tributário
 
@@ -1971,10 +2138,25 @@ Também para quem procura advogado em Recife ou atendimento online em: ações c
 - [{ADVOGADO}]({URL}/osvaldo-matos-de-melo-neto/)
 - [Contato]({URL}/contato/)
 
-## Artigos
+## Artigos e guias
 
 {arts}
+
+## Conteúdo completo
+
+- [Perguntas e respostas de todas as áreas]({URL}/llms-full.txt)
 """
+
+
+def llms_full():
+    partes = [f"# {NOME}: conteúdo completo\n", f"{ORGANIZACAO['description']}\n",
+              f"Endereço: {ENDERECO_TEXTO}\nWhatsApp e telefone: (81) 99299-2676\nE-mail: {EMAIL}\nSite: {URL}/\n"]
+    for item in REGISTRO:
+        partes.append(f"## {item['titulo']}\n\nEndereço: {item['url']}\n\n{item['resumo']}\n")
+        for pergunta, resposta in item["perguntas"]:
+            partes.append(f"### {pergunta}\n\n{texto_puro(resposta)}\n")
+    partes.append("Conteúdo informativo, que não substitui a análise individual de um advogado.\n")
+    return "\n".join(partes)
 
 
 def sitemap(caminhos):
@@ -2069,6 +2251,7 @@ def main():
     escrever("/robots.txt", ROBOTS)
     escrever("/sitemap.xml", sitemap(list(PAGINAS)))
     escrever("/llms.txt", llms_txt(lista_artigos))
+    escrever("/llms-full.txt", llms_full())
     escrever("/.htaccess", HTACCESS)
     print(f"{len(PAGINAS)} páginas geradas em {SAIDA}")
 

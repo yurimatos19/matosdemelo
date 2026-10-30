@@ -893,3 +893,10 @@ html.menu-lock, html.menu-lock body { overflow: hidden; }
 }
 @media (min-width: 1100px) { .footer-grid { grid-template-columns: 1.3fr 1.05fr 1.05fr .8fr 1.2fr; } }
 .areas-extra { margin: 2.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); }
+
+/* Quem atende e legislação consultada */
+.who-box { margin: 0 0 3rem; }
+.prose .who-box h2 { margin-top: 0; font-size: clamp(1.5rem, 2.4vw, 1.9rem); }
+.sources { list-style: none; padding: 0; font-size: .95rem; }
+.sources li { padding: .55rem 0; border-bottom: 1px solid var(--rule); margin: 0; }
+.sources a { display: inline-flex; align-items: center; min-height: 32px; }

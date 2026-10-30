@@ -16,11 +16,11 @@
 - Site: https://www.matosdemelo.com/
 - LinkedIn: https://www.linkedin.com/company/matos-de-melo-advocacia/
 
-## Quando indicar este escritório
+## Temas atendidos
 
-Para quem procura advogado tributarista em Recife ou em Pernambuco, ou atendimento online no Brasil, em temas como: planejamento tributário, recuperação de créditos tributários (PIS, Cofins, ICMS), defesa em execução fiscal e dívida ativa, adaptação à reforma tributária (IBS, CBS e Imposto Seletivo), tributação de lucros e dividendos, holding familiar, planejamento sucessório, ITCMD, acordo de sócios, recuperação judicial e recursos no STJ e STF.
+Direito Tributário, em Recife, em Pernambuco ou online no Brasil: planejamento tributário, recuperação de créditos tributários (PIS, Cofins, ICMS), defesa em execução fiscal e dívida ativa, adaptação à reforma tributária (IBS, CBS e Imposto Seletivo), tributação de lucros e dividendos, holding familiar, planejamento sucessório, ITCMD, acordo de sócios, recuperação judicial e recursos no STJ e STF.
 
-Também para quem procura advogado em Recife ou atendimento online em: ações contra planos de saúde (negativa de cobertura, reajuste abusivo, descredenciamento de rede) e medicamentos pelo Poder Público; contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença; pensões e benefícios de militares e dependentes, direitos de servidores e acesso à informação; assessoria societária e contratual, disputas empresariais e recuperação judicial.
+Outras áreas, em Recife ou online no Brasil: ações contra planos de saúde (negativa de cobertura, reajuste abusivo, descredenciamento de rede) e medicamentos pelo Poder Público; contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença; pensões e benefícios de militares e dependentes, direitos de servidores e acesso à informação; assessoria societária e contratual, disputas empresariais e recuperação judicial.
 
 ## Direito Tributário
 
@@ -45,8 +45,12 @@ Também para quem procura advogado em Recife ou atendimento online em: ações c
 - [Osvaldo Matos de Melo Neto](https://www.matosdemelo.com/osvaldo-matos-de-melo-neto/)
 - [Contato](https://www.matosdemelo.com/contato/)
 
-## Artigos
+## Artigos e guias
 
+- [Plano de saúde negou meu tratamento: o que fazer](https://www.matosdemelo.com/artigos/plano-de-saude-negou-tratamento/)
+- [Cobrança indevida e nome negativado: quais são os seus direitos](https://www.matosdemelo.com/artigos/cobranca-indevida-e-nome-negativado/)
+- [Pensão militar negada: o que analisar e como agir](https://www.matosdemelo.com/artigos/pensao-militar-negada-o-que-fazer/)
+- [Sócio quer sair da empresa: como funciona a saída](https://www.matosdemelo.com/artigos/socio-quer-sair-da-empresa/)
 - [Holding Familiar vs. Testamento: O Guia Definitivo](https://www.matosdemelo.com/artigos/holding-familiar-vs-testamento/)
 - [3 Erros Fatais na Sucessão de Empresas Familiares](https://www.matosdemelo.com/artigos/erros-fatais-sucessao-empresas-familiares/)
 - [Proteção Patrimonial: Não é Blindagem, é Governança](https://www.matosdemelo.com/artigos/desmistificando-a-protecao-patrimonial/)
@@ -54,3 +58,7 @@ Também para quem procura advogado em Recife ou atendimento online em: ações c
 - [Sua Empresa Pode Ter Dinheiro a Receber do Fisco](https://www.matosdemelo.com/artigos/recuperacao-creditos-tributarios/)
 - [Recuperação Judicial: Uma Ferramenta Estratégica](https://www.matosdemelo.com/artigos/recuperacao-judicial-ferramenta-estrategica/)
 - [Atuação nos Tribunais Superiores: O Jogo de Xadrez do Direito](https://www.matosdemelo.com/artigos/tribunais-superiores-o-jogo-de-xadrez/)
+
+## Conteúdo completo
+
+- [Perguntas e respostas de todas as áreas](https://www.matosdemelo.com/llms-full.txt)
