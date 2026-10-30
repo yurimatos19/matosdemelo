@@ -868,3 +868,28 @@ html.menu-lock, html.menu-lock body { overflow: hidden; }
 .btn.btn-line { background: transparent; border-color: var(--graphite); color: var(--graphite); }
 .btn.btn-line:hover { background: var(--graphite); border-color: var(--graphite); color: #fff; }
 .location + .cta-x { border-top: 1px solid rgba(255,255,255,.1); }
+
+/* ==========================================================================
+   Menu de áreas e rodapé com cinco colunas
+   ========================================================================== */
+.nav-group { position: relative; display: inline-flex; }
+.nav-group > a { display: inline-flex; align-items: center; gap: .3rem; }
+.nav-group > a i { font-size: .8rem; transition: transform .25s var(--ease); }
+.nav-group:hover > a i, .nav-group:focus-within > a i { transform: rotate(180deg); }
+.nav-sub {
+    position: absolute; top: 100%; left: -1.2rem; min-width: 290px; margin-top: .6rem; padding: .7rem 0;
+    background: rgba(29,30,34,.98); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 24px 50px rgba(0,0,0,.3);
+    opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s linear .25s;
+}
+.nav-sub::before { content: ''; position: absolute; left: 0; right: 0; top: -.9rem; height: .9rem; }
+.nav-group:hover .nav-sub, .nav-group:focus-within .nav-sub { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.main-nav .nav-sub a { display: block; padding: .6rem 1.2rem; font-size: .88rem; }
+.main-nav .nav-sub a::after { display: none; }
+.main-nav .nav-sub a:hover { background: rgba(255,255,255,.06); color: var(--bronze-light); }
+@media (max-width: 1179px) {
+    .mobile-nav a.sub { font-family: var(--sans); font-size: 1rem; padding: .6rem 0 .6rem 1rem; color: rgba(255,255,255,.72); flex-shrink: 0; }
+    .mobile-nav a:not(.btn) { flex-shrink: 0; }
+}
+@media (min-width: 1100px) { .footer-grid { grid-template-columns: 1.3fr 1.05fr 1.05fr .8fr 1.2fr; } }
+.areas-extra { margin: 2.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); }

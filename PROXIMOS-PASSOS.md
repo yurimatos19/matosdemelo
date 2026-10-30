@@ -1,7 +1,7 @@
 # Novo site Matos de Melo: como publicar e o que fazer depois
 
 ## 1. Antes de publicar
-- [ ] O Dr. Osvaldo revisa os textos jurídicos, principalmente as páginas de **reforma tributária**, **planejamento tributário** (Lei 15.270/2025) e **holding/ITCMD**.
+- [ ] O Dr. Osvaldo revisa os textos jurídicos, principalmente as páginas de **Direito da Saúde**, **Direito Civil e do Consumidor**, **Direito Administrativo e Militar**, **Direito Empresarial**, **reforma tributária**, **planejamento tributário** (Lei 15.270/2025) e **holding/ITCMD**.
 - [ ] Conferir se os **depoimentos** e os números "500+ clientes / 1.000+ processos" estão de acordo com o Provimento 205/2021 da OAB (publicidade na advocacia). Se houver dúvida, apague esses trechos em `gerador/gerar_site.py` e gere o site de novo.
 
 ## 2. Publicar (HostGator)

@@ -55,10 +55,11 @@ def wa(texto="Olá, vim pelo site e gostaria de agendar uma conversa."):
 # Dados estruturados globais (entidade do escritório e do advogado)
 # ---------------------------------------------------------------------------
 AREAS_CONHECIMENTO = [
-    "Direito Tributário", "Planejamento tributário", "Recuperação de créditos tributários",
-    "Execução fiscal", "Reforma tributária (IBS, CBS e Imposto Seletivo)",
-    "Direito Empresarial", "Holding familiar", "Planejamento sucessório",
-    "Recuperação judicial", "Direito Bancário", "Tribunais Superiores (STJ e STF)",
+    "Direito da Saúde", "Ações contra planos de saúde", "Fornecimento de medicamentos pelo Poder Público",
+    "Direito Civil", "Direito do Consumidor", "Direito Administrativo", "Direito Militar",
+    "Direito Empresarial", "Recuperação judicial", "Direito Tributário", "Planejamento tributário",
+    "Recuperação de créditos tributários", "Execução fiscal", "Reforma tributária (IBS, CBS e Imposto Seletivo)",
+    "Holding familiar", "Planejamento sucessório",
 ]
 
 ORGANIZACAO = {
@@ -67,10 +68,9 @@ ORGANIZACAO = {
     "name": NOME,
     "alternateName": ["Matos de Melo Advogados", "Escritório Matos de Melo"],
     "description": (
-        "Escritório de advocacia tributária e empresarial em Recife (PE), fundado em 2018 e liderado "
-        f"pelo advogado tributarista {ADVOGADO} ({OAB}). Atua em planejamento tributário, recuperação "
-        "de créditos tributários, defesa em execução fiscal, reforma tributária, holding familiar, "
-        "planejamento sucessório e recuperação judicial, para empresas e famílias em todo o Brasil."
+        "Escritório de advocacia em Recife (PE), fundado em 2018 e liderado pelo advogado tributarista "
+        f"{ADVOGADO} ({OAB}). Atua em Direito da Saúde, Direito Civil e do Consumidor, Direito "
+        "Administrativo e Militar, Direito Empresarial e Direito Tributário, com atendimento em todo o Brasil."
     ),
     "url": URL + "/",
     "logo": URL + "/assets/img/logo-matos-de-melo.png",
@@ -145,12 +145,20 @@ WEBSITE = {
 # Navegação
 # ---------------------------------------------------------------------------
 NAV = [
-    ("/advogado-tributarista-recife/", "Direito Tributário"),
-    ("/holding-familiar-e-planejamento-sucessorio/", "Holding e Sucessão"),
     ("/areas-de-atuacao/", "Áreas de Atuação"),
+    ("/advogado-tributarista-recife/", "Direito Tributário"),
     ("/o-escritorio/", "O Escritório"),
     ("/artigos/", "Artigos"),
     ("/contato/", "Contato"),
+]
+
+SUBMENU_AREAS = [
+    ("/direito-da-saude/", "Direito da Saúde"),
+    ("/direito-civil-e-do-consumidor/", "Direito Civil e do Consumidor"),
+    ("/direito-administrativo-e-militar/", "Direito Administrativo e Militar"),
+    ("/direito-empresarial/", "Direito Empresarial"),
+    ("/advogado-tributarista-recife/", "Direito Tributário"),
+    ("/holding-familiar-e-planejamento-sucessorio/", "Holding e Sucessão"),
 ]
 
 SERVICOS_TRIBUTARIOS = [
@@ -255,7 +263,8 @@ def cta_band(titulo="Vamos conversar sobre o seu caso.",
 </section>'''
 
 
-def aside_contato(links=None):
+def aside_contato(links=None, titulo="Fale com um advogado tributarista", msg=None):
+    link_wa = wa(msg) if msg else wa()
     lista = ""
     if links:
         lista = '<div class="aside-links"><strong>Veja também</strong>' + "".join(
@@ -263,9 +272,9 @@ def aside_contato(links=None):
     return f'''<aside>
   <div class="aside-box">
     <i class="ph-light ph-chats-circle aside-icon" aria-hidden="true"></i>
-    <h2>Fale com um advogado tributarista</h2>
+    <h2>{titulo}</h2>
     <p>Atendimento pessoal com {ADVOGADO} ({OAB}). Primeira conversa para entender o caso e indicar o caminho.</p>
-    <a class="btn" href="{wa()}" target="_blank" rel="noopener"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> WhatsApp (81) 99299-2676</a>
+    <a class="btn" href="{link_wa}" target="_blank" rel="noopener"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> WhatsApp (81) 99299-2676</a>
     <a class="btn btn-line" href="mailto:{EMAIL}"><i class="ph-light ph-envelope-simple" aria-hidden="true"></i>{EMAIL}</a>
     {lista}
   </div>
@@ -275,16 +284,26 @@ def aside_contato(links=None):
 def layout(*, caminho, titulo, descricao, corpo, ld_extra=(), og_tipo="website", imagem_og=None):
     url = URL + caminho
     imagem_og = imagem_og or URL + "/assets/img/og-matos-de-melo.jpg"
-    nav = "".join(
-        f'<a href="{u}"{" aria-current=\"page\"" if caminho.startswith(u) else ""}>{t}</a>' for u, t in NAV
-    )
-    nav_mobile = "".join(
-        f'<a href="{u}"{" aria-current=\"page\"" if caminho.startswith(u) else ""}>{t}</a>' for u, t in NAV
-    )
+    atual = lambda u: caminho.startswith(u)
+    def item_nav(u, t):
+        if u != "/areas-de-atuacao/":
+            return f'<a href="{u}"{" aria-current=\"page\"" if atual(u) else ""}>{t}</a>'
+        sub = "".join(f'<a href="{su}">{st}</a>' for su, st in SUBMENU_AREAS)
+        marcado = atual(u) or any(atual(su) for su, _ in SUBMENU_AREAS[:4])
+        return (f'<div class="nav-group"><a href="{u}"{" aria-current=\"page\"" if marcado else ""}>{t}'
+                f'<i class="ph-light ph-caret-down" aria-hidden="true"></i></a><div class="nav-sub">{sub}</div></div>')
+    nav = "".join(item_nav(u, t) for u, t in NAV)
+    def item_mobile(u, t):
+        link = f'<a href="{u}"{" aria-current=\"page\"" if atual(u) else ""}>{t}</a>'
+        if u == "/areas-de-atuacao/":
+            link += "".join(f'<a class="sub" href="{su}">{st}</a>' for su, st in SUBMENU_AREAS)
+        return link
+    nav_mobile = "".join(item_mobile(u, t) for u, t in NAV if u != "/advogado-tributarista-recife/")
     grafo = [ORGANIZACAO, PESSOA, WEBSITE,
              {"@type": "WebPage", "@id": url + "#pagina", "url": url, "name": titulo,
               "description": descricao, "inLanguage": "pt-BR", "isPartOf": {"@id": SITE_ID},
               "about": {"@id": ORG_ID}, "dateModified": HOJE}] + list(ld_extra)
+    rodape_areas = "".join(f'<li><a href="{u}">{t}</a></li>' for u, t in SUBMENU_AREAS)
     rodape_servicos = "".join(f'<li><a href="{u}">{t}</a></li>' for u, _, t, _ in SERVICOS_TRIBUTARIOS)
     return f'''<!DOCTYPE html>
 <html lang="pt-BR">
@@ -347,8 +366,12 @@ def layout(*, caminho, titulo, descricao, corpo, ld_extra=(), og_tipo="website",
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="brand" href="/" aria-label="{NOME} — página inicial"><img src="/assets/img/logo-matos-de-melo.png" alt="" width="40" height="40"><span>Matos de Melo<small>Advocacia</small></span></a>
-        <p>Advocacia tributária e empresarial em Recife (PE), desde 2018. Atendimento a empresas e famílias em todo o Brasil.</p>
+        <p>Escritório de advocacia em Recife (PE), desde 2018. Atendimento a pessoas, famílias e empresas em todo o Brasil.</p>
         <p>Responsável técnico: {ADVOGADO} — {OAB}</p>
+      </div>
+      <div>
+        <h2>Áreas de atuação</h2>
+        <ul>{rodape_areas}</ul>
       </div>
       <div>
         <h2>Direito Tributário</h2>
@@ -357,8 +380,6 @@ def layout(*, caminho, titulo, descricao, corpo, ld_extra=(), og_tipo="website",
       <div>
         <h2>Escritório</h2>
         <ul>
-          <li><a href="/holding-familiar-e-planejamento-sucessorio/">Holding familiar e sucessão</a></li>
-          <li><a href="/areas-de-atuacao/">Áreas de atuação</a></li>
           <li><a href="/o-escritorio/">O escritório</a></li>
           <li><a href="/osvaldo-matos-de-melo-neto/">Osvaldo Matos de Melo Neto</a></li>
           <li><a href="/artigos/">Artigos</a></li>
@@ -412,7 +433,8 @@ def pagina(caminho, **kw):
 # Página de serviço (modelo comum)
 # ---------------------------------------------------------------------------
 def pagina_servico(*, caminho, trail, titulo, descricao, h1, lead, resumo, conteudo, perguntas,
-                   nome_servico, relacionados, imagem="/assets/img/artigos-direito-tributario.jpg",
+                   nome_servico, relacionados, imagem="/assets/img/banner-direito-tributario.webp",
+                   aside_titulo="Fale com um advogado tributarista", aside_msg=None,
                    tipo="Direito Tributário"):
     url = URL + caminho
     corpo = page_hero(trail, h1, lead, imagem) + f'''
@@ -423,7 +445,7 @@ def pagina_servico(*, caminho, trail, titulo, descricao, h1, lead, resumo, conte
       {conteudo}
       {faq_html(perguntas)}
     </div>
-    {aside_contato(relacionados)}
+    {aside_contato(relacionados, aside_titulo, aside_msg)}
   </div>
 </section>
 {cta_band()}'''
@@ -451,10 +473,39 @@ def cinco_anos_atras(d):
         return d.replace(year=d.year - 5, day=28)
 
 
-ICONES_TRIAGEM = {"cobranca": "ph-warning-circle", "pago-demais": "ph-coins", "pagar-menos": "ph-chart-line-down",
+ICONES_TRIAGEM = {"saude": "ph-heartbeat", "consumidor": "ph-file-text", "servidor": "ph-buildings", "empresa": "ph-briefcase",
+                  "cobranca": "ph-warning-circle", "pago-demais": "ph-coins", "pagar-menos": "ph-chart-line-down",
                   "reforma": "ph-calendar-check", "sucessao": "ph-users-three"}
 
 TRIAGEM = [
+    ("saude", "O plano de saúde negou meu tratamento",
+     "Direito da Saúde / plano de saúde", "/direito-da-saude/",
+     "Reúna os documentos e aja rápido",
+     "A negativa de cobertura pode ser questionada, inclusive com pedido de liminar quando há urgência. O mesmo vale para reajustes abusivos, descredenciamento de rede e medicamentos pedidos ao Poder Público.",
+     "Peça a negativa por escrito e um relatório do médico explicando o tratamento e a urgência.",
+     "Falar sobre meu tratamento",
+     "Olá! Tive um problema com plano de saúde ou medicamento e gostaria de uma análise."),
+    ("consumidor", "Tenho um problema com contrato, cobrança ou banco",
+     "Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/",
+     "Guarde tudo por escrito",
+     "Cobranças indevidas, negativação, fraudes bancárias, rescisões e indenizações têm regras e prazos próprios. Quem já tem uma decisão favorável também pode precisar de ajuda para receber o que foi decidido.",
+     "Separe o contrato, as faturas, os protocolos e as conversas sobre o problema.",
+     "Falar sobre meu caso",
+     "Olá! Tenho um problema com contrato, cobrança ou banco e gostaria de uma análise."),
+    ("servidor", "Sou militar, servidor ou dependente",
+     "Direito Administrativo e Militar", "/direito-administrativo-e-militar/",
+     "Identifique a regra e o prazo",
+     "Pensões, benefícios, licenças e direitos funcionais dependem do vínculo e da lei aplicável. O mesmo vale para requerimentos e pedidos de acesso à informação feitos a órgãos públicos.",
+     "Reúna as portarias, as fichas funcionais e os protocolos ou decisões do órgão.",
+     "Falar sobre meu direito",
+     "Olá! Sou militar, servidor ou dependente e gostaria de orientação."),
+    ("empresa", "Minha empresa precisa de assessoria ou enfrenta uma disputa",
+     "Direito Empresarial", "/direito-empresarial/",
+     "Previna antes que vire processo",
+     "Contratos, regras entre sócios e prevenção de riscos evitam boa parte dos conflitos. Se a disputa ou a crise já começou, avaliamos os caminhos, inclusive a recuperação judicial para empresas viáveis.",
+     "Separe o contrato social, os contratos envolvidos e um resumo da situação.",
+     "Falar sobre minha empresa",
+     "Olá! Preciso de orientação jurídica para a minha empresa."),
     ("cobranca", "Recebi uma cobrança ou execução fiscal",
      "Execução fiscal / dívida tributária", "/direito-tributario/defesa-em-execucao-fiscal/",
      "Aja nos próximos dias",
@@ -578,6 +629,10 @@ def linha_do_tempo_reforma():
 
 
 IMAGEM_SERVICO = {
+    "/direito-da-saude/": "banner-direito-da-saude.webp",
+    "/direito-civil-e-do-consumidor/": "banner-direito-civil-consumidor.webp",
+    "/direito-administrativo-e-militar/": "banner-direito-administrativo-militar.webp",
+    "/direito-empresarial/": "banner-direito-empresarial.webp",
     "/direito-tributario/recuperacao-de-creditos-tributarios/": "banner-recuperacao-creditos.webp",
     "/direito-tributario/defesa-em-execucao-fiscal/": "banner-defesa-execucao-fiscal.webp",
     "/direito-tributario/planejamento-tributario/": "banner-planejamento-tributario.webp",
@@ -590,9 +645,14 @@ IMAGEM_SERVICO = {
 }
 
 
+def previa(url):
+    imagem = IMAGEM_SERVICO.get(url)
+    return f' data-preview="/assets/img/{imagem}"' if imagem else ""
+
+
 def lista_servicos(itens):
     linhas = "".join(
-        f'<li><a href="{u}" data-preview="/assets/img/{IMAGEM_SERVICO.get(u, "banner-areas-atuacao.webp")}"><h3><i class="ph-light {ic}" aria-hidden="true"></i>{t}</h3><p>{d}</p><span class="go">Ver o serviço<i class="ph-light ph-arrow-up-right" aria-hidden="true"></i></span></a></li>'
+        f'<li><a href="{u}"{previa(u)}><h3><i class="ph-light {ic}" aria-hidden="true"></i>{t}</h3><p>{d}</p><span class="go">Ver o serviço<i class="ph-light ph-arrow-up-right" aria-hidden="true"></i></span></a></li>'
         for u, ic, t, d in itens
     )
     return f'<ul class="practice-list">{linhas}</ul>'
@@ -623,11 +683,13 @@ PERGUNTAS_HOME = [
      "<p>O contato inicial pode ser feito pelo WhatsApp (81) 99299-2676 ou pelo e-mail " + EMAIL + ". Em seguida, é "
      "agendada uma conversa de diagnóstico, presencial em Recife ou por vídeo, para entender o caso, os documentos "
      "disponíveis e indicar o caminho jurídico mais adequado.</p>"),
+    ("O escritório atua contra planos de saúde?",
+     "<p>Sim. O escritório atua em negativas de cobertura, reajustes abusivos e descredenciamento de rede, além de pedidos de fornecimento de medicamentos pelo Poder Público. Veja a página de <a href=\"/direito-da-saude/\">Direito da Saúde</a>.</p>"),
+    ("O escritório atende militares e servidores públicos?",
+     "<p>Sim, em pensões e benefícios de militares e dependentes, licenças e direitos de servidores, além de requerimentos e ações perante órgãos públicos. Veja a página de <a href=\"/direito-administrativo-e-militar/\">Direito Administrativo e Militar</a>.</p>"),
     ("Quais são as áreas de atuação da Matos de Melo Advocacia?",
-     "<p>Direito Tributário (planejamento, recuperação de créditos, execução fiscal e reforma tributária), Direito "
-     "Empresarial e Societário, Holding Familiar e Planejamento Sucessório, Proteção Patrimonial, Recuperação Judicial, "
-     "Direito Bancário e reestruturação de passivos, Direito Administrativo empresarial e atuação nos Tribunais "
-     "Superiores (STJ e STF).</p>"),
+     "<p>Direito da Saúde, Direito Civil e do Consumidor, Direito Administrativo e Militar, Direito Empresarial "
+     "e Direito Tributário.</p>"),
 ]
 
 DEPOIMENTOS = [
@@ -653,7 +715,7 @@ CASOS = [
 
 
 def home():
-    outras = [(link or f"/areas-de-atuacao/#{ancora}", ic, t, d) for ancora, ic, t, d, link in AREAS[1:6]]
+    outras = [(link or f"/areas-de-atuacao/#{ancora}", ic, t, d) for ancora, ic, t, d, link in AREAS if ancora != "direito-tributario"]
     casos = "".join(
         f'<article class="card"><p class="tag">{c}</p><h3>{t}</h3><p><strong>Desafio.</strong> {d}</p><p><strong>Solução.</strong> {s}</p><p style="margin:0"><strong>Resultado.</strong> {r}</p></article>'
         for c, t, d, s, r in CASOS
@@ -663,7 +725,7 @@ def home():
     )
     faixa = "".join(f"<span>{t}</span><i></i>" for t in [
         "Planejamento tributário", "Recuperação de créditos", "Execução fiscal", "Reforma tributária",
-        "Holding familiar", "Planejamento sucessório", "Direito societário", "Tribunais Superiores"])
+        "Direito da Saúde", "Direito Civil e do Consumidor", "Direito Administrativo e Militar", "Direito Empresarial"])
     corpo = f'''<div class="intro" aria-hidden="true">
   <div class="intro-inner">{MONOGRAMA}<p>Matos de Melo<small>Advocacia</small></p></div>
 </div>
@@ -672,9 +734,9 @@ def home():
   <div class="hero-x-text">
     {MONOGRAMA}
     <div class="hero-x-copy">
-      <p class="hero-x-kicker hx-1">Advocacia tributária e empresarial em Recife</p>
+      <p class="hero-x-kicker hx-1">Escritório de advocacia em Recife</p>
       <h1 class="hero-x-title"><span class="ln"><span>Advogado tributarista</span></span> <span class="ln"><span>em Recife, para</span></span> <span class="ln"><span>empresas e famílias.</span></span></h1>
-      <p class="lead hx-2">Planejamento tributário, recuperação de créditos, defesa em execução fiscal e a transição para a reforma tributária, com atendimento direto pelo sócio-fundador.</p>
+      <p class="lead hx-2">Direito Tributário, Empresarial, da Saúde, Civil e do Consumidor, Administrativo e Militar, com atendimento direto pelo sócio-fundador.</p>
       <div class="hero-actions hx-3">
         <a class="btn" href="{wa()}" target="_blank" rel="noopener"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i> Agendar pelo WhatsApp</a>
         <a class="link-line" href="#por-onde-comecar">Descobrir por onde começar</a>
@@ -696,9 +758,9 @@ def home():
 
 <section class="section statement-section">
   <div class="container">
-    <p class="statement" data-words>Ajudamos empresas a pagar apenas o tributo devido, recuperar o que foi pago a mais e atravessar a reforma tributária com segurança.</p>
+    <p class="statement" data-words>Da negativa de um plano de saúde a uma execução fiscal: orientação clara e atendimento direto em cada etapa do seu caso.</p>
     <div class="statement-foot">
-      <p>A {NOME} é um escritório de advocacia tributária e empresarial em Boa Viagem, Recife, liderado pelo advogado tributarista {ADVOGADO} ({OAB}). Atendemos empresas e famílias em Pernambuco e em todo o Brasil.</p>
+      <p>A {NOME} é um escritório de advocacia em Boa Viagem, Recife, liderado pelo advogado tributarista {ADVOGADO} ({OAB}). Atua em Direito da Saúde, Civil e do Consumidor, Administrativo e Militar, Empresarial e Tributário, para pessoas, famílias e empresas em todo o Brasil.</p>
       <a class="link-line" href="/o-escritorio/">Conhecer o escritório</a>
     </div>
   </div>
@@ -753,8 +815,8 @@ def home():
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <h2 class="reveal">Patrimônio, sociedades e crise</h2>
-      <p>O Direito Tributário raramente aparece sozinho. Atuamos também nas áreas que costumam caminhar junto com ele.</p>
+      <h2 class="reveal">Outras áreas de atuação</h2>
+      <p>Além do Direito Tributário, o escritório atende pessoas, famílias, servidores e empresas nestas quatro áreas.</p>
     </div>
     {lista_servicos(outras)}
   </div>
@@ -796,7 +858,7 @@ def home():
     <div>
       <h2 class="reveal">O escritório em resumo</h2>
       <dl class="facts">
-        <div><dt><i class="ph-light ph-briefcase" aria-hidden="true"></i>Especialidade</dt><dd>Direito Tributário e Empresarial, Holding Familiar e Planejamento Sucessório</dd></div>
+        <div><dt><i class="ph-light ph-briefcase" aria-hidden="true"></i>Especialidade</dt><dd>Direito da Saúde, Civil e do Consumidor, Administrativo e Militar, Empresarial e Tributário</dd></div>
         <div><dt><i class="ph-light ph-user" aria-hidden="true"></i>Advogado responsável</dt><dd><a href="/osvaldo-matos-de-melo-neto/">{ADVOGADO}</a>, {OAB}</dd></div>
         <div><dt><i class="ph-light ph-calendar-blank" aria-hidden="true"></i>Fundação</dt><dd>2018</dd></div>
         <div><dt><i class="ph-light ph-map-pin" aria-hidden="true"></i>Endereço</dt><dd>{ENDERECO_TEXTO}</dd></div>
@@ -816,7 +878,7 @@ def home():
 {cta_band()}'''
     pagina("/",
            titulo="Advogado Tributarista em Recife | Matos de Melo Advocacia",
-           descricao=f"Escritório de advocacia tributária e empresarial em Recife (Boa Viagem). Planejamento tributário, recuperação de créditos, execução fiscal, reforma tributária e holding familiar. {ADVOGADO}, {OAB}.",
+           descricao=f"Escritório de advocacia em Recife (Boa Viagem): Direito Tributário, Empresarial, da Saúde, Civil e do Consumidor, Administrativo e Militar. {ADVOGADO}, {OAB}.",
            corpo=corpo, ld_extra=[faq_ld(PERGUNTAS_HOME, URL + "/")])
 
 
@@ -1015,7 +1077,7 @@ def execucao_fiscal():
              "<p>Depende do caso. Muitas vezes a melhor estratégia combina as duas coisas: afastar na Justiça a parte indevida da cobrança e negociar o restante por transação ou parcelamento, com descontos.</p>"),
         ],
         relacionados=[("Recuperação de créditos tributários", "/direito-tributario/recuperacao-de-creditos-tributarios/"),
-                      ("Recuperação judicial", "/areas-de-atuacao/#recuperacao-judicial"),
+                      ("Recuperação judicial", "/artigos/recuperacao-judicial-ferramenta-estrategica/"),
                       ("Advogado tributarista em Recife", "/advogado-tributarista-recife/")],
     )
 
@@ -1133,6 +1195,7 @@ def holding():
         h1="Holding familiar e planejamento sucessório",
         lead="Organizar a sucessão em vida evita inventários longos, reduz custos e preserva a harmonia da família e a continuidade da empresa.",
         nome_servico="Holding familiar e planejamento sucessório",
+        aside_titulo="Fale com um advogado",
         tipo="Planejamento Sucessório",
         imagem="/assets/img/banner-holding-sucessao.webp",
         resumo="<p>A <strong>holding familiar</strong> é uma empresa criada para concentrar e administrar os bens da família. Os bens passam a pertencer à holding, e os herdeiros recebem quotas — muitas vezes doadas em vida, com <strong>reserva de usufruto</strong> para os pais, que continuam no controle. Bem estruturada, ela simplifica a sucessão, pode reduzir custos com inventário e ITCMD e cria regras claras de governança.</p>",
@@ -1182,30 +1245,245 @@ def holding():
 # ÁREAS DE ATUAÇÃO
 # ===========================================================================
 AREAS = [
-    ("direito-tributario", "ph-scales", "Direito Tributário",
-     "Planejamento tributário, recuperação de créditos, defesa em execuções fiscais e processos administrativos, e adaptação à reforma tributária.",
+    ("direito-da-saude", "ph-heartbeat", "Direito da Saúde",
+     "Ações contra planos de saúde por negativa de cobertura, reajustes abusivos e descredenciamento de rede, além de pedidos de fornecimento de medicamentos pelo Poder Público.",
+     "/direito-da-saude/"),
+    ("direito-civil-e-do-consumidor", "ph-file-text", "Direito Civil e do Consumidor",
+     "Contratos, cobranças, rescisões contratuais, indenizações, litígios bancários e fase de execução e cumprimento de sentença.",
+     "/direito-civil-e-do-consumidor/"),
+    ("direito-administrativo-e-militar", "ph-buildings", "Direito Administrativo e Militar",
+     "Requerimentos e ações perante órgãos públicos, pensões e benefícios de militares e dependentes, licenças e direitos de servidores, além de pedidos de acesso à informação.",
+     "/direito-administrativo-e-militar/"),
+    ("direito-empresarial", "ph-briefcase", "Direito Empresarial",
+     "Assessoria societária e contratual a empresas, prevenção de riscos e atuação em disputas empresariais e recuperação judicial.",
+     "/direito-empresarial/"),
+    ("direito-tributario", "ph-calculator", "Direito Tributário",
+     "Consultivo e contencioso tributário, com planejamento e defesa do contribuinte em discussões administrativas e judiciais.",
      "/advogado-tributarista-recife/"),
-    ("holding-familiar", "ph-tree-structure", "Holding Familiar e Planejamento Sucessório",
-     "Sucessão segura do patrimônio e da gestão de empresas familiares, com holding, doações com usufruto e testamentos.",
-     "/holding-familiar-e-planejamento-sucessorio/"),
-    ("direito-empresarial", "ph-handshake", "Direito Empresarial e Societário",
-     "Acordos de sócios, governança corporativa, reorganizações societárias, mediação de impasses e operações de compra e venda de empresas.",
-     "/artigos/acordo-de-socios-o-documento-vital/"),
-    ("protecao-patrimonial", "ph-vault", "Proteção Patrimonial",
-     "Organização jurídica do patrimônio para separar riscos e prevenir litígios, sempre dentro da lei.",
-     "/artigos/desmistificando-a-protecao-patrimonial/"),
-    ("recuperacao-judicial", "ph-lifebuoy", "Recuperação Judicial",
-     "Condução de recuperação judicial e extrajudicial para preservar empresas viáveis em momentos de crise.",
-     "/artigos/recuperacao-judicial-ferramenta-estrategica/"),
-    ("direito-bancario", "ph-bank", "Direito Bancário e Reestruturação de Passivos",
-     "Defesa de empresas frente a instituições financeiras, renegociação de dívidas e revisão de contratos abusivos.",
-     None),
-    ("direito-administrativo", "ph-buildings", "Direito Administrativo Empresarial",
-     "Assessoria na relação com o Poder Público: licitações, contratos administrativos e concessões.",
-     None),
-    ("tribunais-superiores", "ph-gavel", "Atuação nos Tribunais Superiores",
-     "Recursos e sustentação oral no STJ e no STF, com foco em teses tributárias e empresariais de alta complexidade.",
-     "/artigos/tribunais-superiores-o-jogo-de-xadrez/"),
+]
+
+
+AREAS_TRAIL = ("/areas-de-atuacao/", "Áreas de atuação")
+
+
+def saude():
+    caminho = "/direito-da-saude/"
+    pagina_servico(
+        caminho=caminho, trail=[INICIO, AREAS_TRAIL, (caminho, "Direito da Saúde")],
+        titulo="Advogado de Plano de Saúde em Recife | Matos de Melo Advocacia",
+        descricao="Negativa de cobertura, reajuste abusivo, descredenciamento de rede e fornecimento de medicamentos pelo Poder Público. Advogado de Direito da Saúde em Recife, com atendimento em todo o Brasil.",
+        h1="Direito da Saúde",
+        lead="Ações contra planos de saúde e pedidos de medicamentos ao Poder Público, com a urgência que um tratamento exige.",
+        nome_servico="Direito da Saúde: ações contra planos de saúde e fornecimento de medicamentos",
+        tipo="Direito da Saúde",
+        imagem="/assets/img/banner-direito-da-saude.webp",
+        aside_titulo="Fale com um advogado sobre o seu tratamento",
+        aside_msg="Olá! Preciso de orientação sobre um problema com plano de saúde ou medicamento.",
+        resumo="<p>O escritório atua em <strong>negativas de cobertura, reajustes abusivos e descredenciamento de rede</strong> por planos de saúde, e em <strong>pedidos de fornecimento de medicamentos pelo Poder Público</strong>. Quando há urgência médica comprovada, é possível pedir à Justiça uma decisão liminar, antes do fim do processo.</p>",
+        conteudo='''
+<h2>Em que podemos ajudar</h2>
+<h3>Negativa de cobertura</h3>
+<p>Recusa de exame, cirurgia, internação, terapia, home care ou medicamento. Os planos seguem a Lei 9.656/1998 e, em regra, o Código de Defesa do Consumidor (Súmula 608 do STJ, com exceção das autogestões). O rol da ANS é a referência básica de cobertura, mas tratamentos fora dele podem ser cobertos quando atendem aos requisitos da Lei 14.454/2022 e aos critérios definidos pelo STF em 2025 (ADI 7.265).</p>
+<h3>Urgência, emergência e carência</h3>
+<p>A carência máxima para urgência e emergência é de 24 horas (art. 12, V, c, da Lei 9.656/1998 e Súmula 597 do STJ). A limitação do tempo de internação também é considerada abusiva (Súmula 302 do STJ).</p>
+<h3>Reajustes abusivos</h3>
+<p>Nos planos individuais e familiares, o percentual anual segue o limite da ANS. Nos coletivos e por faixa etária, o aumento pode ser questionado quando falta justificativa ou transparência no cálculo, ou quando o percentual é desarrazoado (Tema 952 do STJ, para a faixa etária).</p>
+<h3>Descredenciamento de rede e cancelamento do plano</h3>
+<p>A substituição de um hospital ou prestador exige outro equivalente e comunicação com 30 dias de antecedência (art. 17 da Lei 9.656/1998). Se um plano coletivo for cancelado durante o tratamento de doença grave, a operadora deve assegurar a continuidade dos cuidados (Tema 1.082 do STJ).</p>
+<h3>Medicamentos pelo Poder Público</h3>
+<p>Quando o medicamento não é oferecido pelo SUS, o pedido precisa atender aos requisitos fixados pelo STF em 2024 (Temas 6 e 1.234), como laudo fundamentado, comprovação de eficácia e falta de alternativa terapêutica, em regra com registro na Anvisa (Tema 500).</p>
+
+<h2>Plano negou o tratamento: o que fazer</h2>
+<ol class="steps">
+  <li><strong>Peça a negativa por escrito</strong>, com o motivo, e anote os protocolos de atendimento.</li>
+  <li><strong>Peça ao médico um relatório detalhado</strong> com o diagnóstico, o tratamento indicado, a urgência e os riscos da demora.</li>
+  <li><strong>Reúna os documentos</strong>: carteirinha, contrato, comprovantes de pagamento e exames.</li>
+  <li><strong>Procure orientação jurídica</strong> para avaliar a reclamação na ANS e a ação judicial, com pedido de liminar quando houver urgência.</li>
+</ol>
+<p class="note">Em emergência médica, procure atendimento imediatamente. Cada caso depende de análise individual e não há promessa de resultado.</p>
+''',
+        perguntas=[
+            ("O plano de saúde pode negar um tratamento indicado pelo médico?",
+             "<p>Depende do contrato, da doença e do tratamento. A negativa pode ser questionada quando a doença tem cobertura e o tratamento é indicado por relatório médico fundamentado, inclusive em alguns casos fora do rol da ANS. É preciso analisar cada situação.</p>"),
+            ("Quanto tempo leva para conseguir uma liminar contra o plano?",
+             "<p>Não há prazo fixo: depende do juízo e dos documentos apresentados. Em casos urgentes, o pedido é analisado com prioridade, por isso um relatório médico que explique a urgência é tão importante.</p>"),
+            ("Meu plano teve um reajuste muito alto. Posso questionar?",
+             "<p>Sim, em muitos casos. A análise compara o tipo de plano, o percentual aplicado e a justificativa da operadora. Conforme o caso, é possível pedir a revisão do reajuste e a devolução de valores pagos a mais.</p>"),
+            ("O hospital onde me trato saiu da rede. O que acontece?",
+             "<p>A operadora deve substituir o prestador por outro equivalente e comunicar a mudança com antecedência. Se você está em tratamento, é importante avaliar o caso rapidamente, para evitar a interrupção.</p>"),
+            ("Como pedir um medicamento de alto custo ao SUS?",
+             "<p>O primeiro passo é verificar se o medicamento já faz parte das listas do SUS. Se não fizer, será preciso reunir um laudo médico fundamentado e comprovar os requisitos definidos pelo STF. A estratégia e o órgão responsável dependem do medicamento e do valor do tratamento.</p>"),
+        ],
+        relacionados=[("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
+                      ("Direito Administrativo e Militar", "/direito-administrativo-e-militar/"),
+                      ("Todas as áreas de atuação", "/areas-de-atuacao/")],
+    )
+
+
+def civil():
+    caminho = "/direito-civil-e-do-consumidor/"
+    pagina_servico(
+        caminho=caminho, trail=[INICIO, AREAS_TRAIL, (caminho, "Direito Civil e do Consumidor")],
+        titulo="Advogado Civil e do Consumidor em Recife | Matos de Melo Advocacia",
+        descricao="Contratos, cobranças, rescisões contratuais, indenizações, litígios bancários e cumprimento de sentença. Advogado de Direito Civil e do Consumidor em Recife, com atendimento em todo o Brasil.",
+        h1="Direito Civil e do Consumidor",
+        lead="Contratos, cobranças, indenizações e disputas com bancos e empresas, da negociação até o recebimento do que foi decidido.",
+        nome_servico="Direito Civil e do Consumidor",
+        tipo="Direito Civil e do Consumidor",
+        imagem="/assets/img/banner-direito-civil-consumidor.webp",
+        aside_titulo="Fale com um advogado sobre o seu caso",
+        aside_msg="Olá! Preciso de orientação sobre um contrato, uma cobrança ou um problema de consumo.",
+        resumo="<p>O escritório atua em <strong>contratos, cobranças, rescisões contratuais, indenizações e litígios bancários</strong>, e também na <strong>fase de execução e cumprimento de sentença</strong>, quando a decisão precisa ser efetivamente cumprida. Os prazos variam conforme o caso, por isso vale avaliar o problema logo no início.</p>",
+        conteudo='''
+<h2>Em que podemos ajudar</h2>
+<h3>Contratos e rescisões</h3>
+<p>Elaboração e revisão de contratos, notificações, renegociações e rescisões, com análise de multas, devoluções e responsabilidades de cada parte.</p>
+<h3>Cobranças</h3>
+<p>Cobrança de valores devidos e defesa contra cobranças indevidas. Na relação de consumo, quem paga uma quantia cobrada indevidamente pode ter direito à devolução em dobro (art. 42, parágrafo único, do CDC e entendimento do STJ no EAREsp 676.608).</p>
+<h3>Indenizações</h3>
+<p>Danos materiais e morais causados por descumprimento de contrato, falha na prestação de serviço, produto com defeito ou negativação indevida do nome. Quem já tem outra negativação legítima, em regra, não recebe dano moral por uma nova inscrição (Súmula 385 do STJ).</p>
+<h3>Litígios bancários</h3>
+<p>Fraudes, empréstimos não contratados, descontos indevidos e revisão de contratos. O CDC se aplica aos bancos (Súmula 297 do STJ), que respondem por fraudes ligadas à sua atividade (Súmula 479 do STJ). Quem está superendividado também pode pedir a repactuação das dívidas (Lei 14.181/2021).</p>
+<h3>Execução e cumprimento de sentença</h3>
+<p>Atuação para receber o que foi decidido ou para defender quem está sendo executado. Depois da intimação, o devedor tem 15 dias para pagar, sob pena de multa de 10% e honorários de 10% (art. 523 do CPC), e o mesmo prazo, em seguida, para apresentar impugnação (art. 525).</p>
+
+<h2>Prazos que merecem atenção</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Situação</th><th>Prazo geral</th></tr></thead>
+  <tbody>
+    <tr><td>Reclamar de defeito aparente em produto ou serviço</td><td>30 dias (não duráveis) ou 90 dias (duráveis), art. 26 do CDC</td></tr>
+    <tr><td>Desistir de compra feita fora da loja, como pela internet</td><td>7 dias, art. 49 do CDC</td></tr>
+    <tr><td>Pedir indenização por acidente de consumo</td><td>5 anos, art. 27 do CDC</td></tr>
+    <tr><td>Pedir reparação civil em geral</td><td>3 anos, art. 206, § 3º, V, do Código Civil</td></tr>
+    <tr><td>Cobrar dívida líquida prevista em documento</td><td>5 anos, art. 206, § 5º, I, do Código Civil</td></tr>
+  </tbody>
+</table></div>
+<p class="note">Os prazos podem mudar conforme o caso concreto. Cada situação depende de análise individual e não há promessa de resultado.</p>
+''',
+        perguntas=[
+            ("Meu nome foi negativado sem motivo. O que posso fazer?",
+             "<p>Guarde o comprovante da negativação e os documentos que mostram que a dívida não existe ou já foi paga. É possível pedir a retirada do nome dos cadastros e, conforme o caso, indenização por danos morais.</p>"),
+            ("Caí em um golpe ou tive um empréstimo feito no meu nome. O banco responde?",
+             "<p>Pode responder, principalmente quando a fraude está ligada à segurança dos serviços do banco. Registre o boletim de ocorrência, comunique o banco por escrito e guarde os protocolos o quanto antes.</p>"),
+            ("Por quanto tempo uma dívida pode ficar no meu nome?",
+             "<p>Os cadastros de inadimplentes podem manter a informação negativa por, no máximo, 5 anos (art. 43, § 1º, do CDC). Isso não significa, sozinho, que a dívida deixou de existir: é preciso verificar também a prescrição.</p>"),
+            ("Preciso de advogado no Juizado Especial?",
+             "<p>Nos Juizados Especiais Cíveis, causas de até 20 salários mínimos dispensam advogado na primeira instância, e o limite total é de 40 salários (Lei 9.099/1995). Mesmo assim, a orientação jurídica ajuda a escolher o caminho e a organizar as provas.</p>"),
+            ("Ganhei o processo, mas não recebi. E agora?",
+             "<p>É preciso iniciar o cumprimento de sentença. Se não houver pagamento voluntário, a Justiça pode determinar medidas como o bloqueio de valores e a penhora de bens, respeitadas as regras de impenhorabilidade.</p>"),
+        ],
+        relacionados=[("Direito da Saúde", "/direito-da-saude/"),
+                      ("Direito Empresarial", "/direito-empresarial/"),
+                      ("Todas as áreas de atuação", "/areas-de-atuacao/")],
+    )
+
+
+def administrativo():
+    caminho = "/direito-administrativo-e-militar/"
+    pagina_servico(
+        caminho=caminho, trail=[INICIO, AREAS_TRAIL, (caminho, "Direito Administrativo e Militar")],
+        titulo="Advogado Administrativo e Militar em Recife | Matos de Melo",
+        descricao="Requerimentos e ações perante órgãos públicos, pensões e benefícios de militares e dependentes, licenças e direitos de servidores e pedidos de acesso à informação. Atendimento em Recife e em todo o Brasil.",
+        h1="Direito Administrativo e Militar",
+        lead="Requerimentos e ações perante órgãos públicos, para servidores, militares, dependentes e cidadãos.",
+        nome_servico="Direito Administrativo e Militar",
+        tipo="Direito Administrativo e Militar",
+        imagem="/assets/img/banner-direito-administrativo-militar.webp",
+        aside_titulo="Fale com um advogado sobre o seu direito",
+        aside_msg="Olá! Preciso de orientação sobre uma questão com órgão público, servidor ou militar.",
+        resumo="<p>O escritório atua em <strong>requerimentos e ações perante órgãos públicos</strong>, <strong>pensões e benefícios de militares e dependentes</strong>, <strong>licenças e direitos de servidores</strong> e <strong>pedidos de acesso à informação</strong>. Muitos casos começam na via administrativa e seguem para a Justiça quando o pedido é negado ou fica sem resposta.</p>",
+        conteudo='''
+<h2>Em que podemos ajudar</h2>
+<h3>Requerimentos e ações perante órgãos públicos</h3>
+<p>Elaboração de pedidos e recursos administrativos e, quando necessário, ações judiciais e mandado de segurança. O mandado de segurança tem prazo de 120 dias, contados da ciência do ato questionado (art. 23 da Lei 12.016/2009).</p>
+<h3>Pensões e benefícios de militares e dependentes</h3>
+<p>Orientação sobre pedidos, revisões e negativas de pensão militar e outros benefícios. Nas Forças Armadas, as principais regras estão no Estatuto dos Militares (Lei 6.880/1980), na Lei de Pensões Militares (Lei 3.765/1960) e nas mudanças da Lei 13.954/2019. Policiais e bombeiros militares também seguem normas do seu estado.</p>
+<h3>Licenças e direitos de servidores</h3>
+<p>Licenças, afastamentos, remuneração e outros direitos funcionais. Os servidores federais seguem a Lei 8.112/1990, e os estaduais e municipais seguem o estatuto do seu ente. Por isso, a primeira etapa é identificar qual regra se aplica.</p>
+<h3>Acesso à informação</h3>
+<p>Pedidos e recursos com base na Lei de Acesso à Informação (Lei 12.527/2011). O órgão tem, em regra, 20 dias para responder, prorrogáveis por mais 10, e cabe recurso em 10 dias em caso de negativa.</p>
+
+<h2>Como costuma funcionar</h2>
+<ol class="steps">
+  <li><strong>Análise da situação</strong>: qual é o vínculo, qual lei se aplica e qual prazo está correndo.</li>
+  <li><strong>Reunião de documentos</strong>: fichas funcionais, portarias, certidões, requerimentos e decisões anteriores.</li>
+  <li><strong>Pedido administrativo</strong>, quando for o caminho adequado, com acompanhamento e eventual recurso.</li>
+  <li><strong>Ação judicial</strong>, quando o pedido é negado, fica sem resposta ou a urgência exige.</li>
+</ol>
+<p class="note">Cada caso depende de análise individual e não há promessa de resultado.</p>
+''',
+        perguntas=[
+            ("Quem tem direito à pensão militar?",
+             "<p>Depende da data do falecimento, da condição do dependente e da lei aplicável a cada caso. Por isso é importante analisar a documentação do militar e dos dependentes antes do pedido.</p>"),
+            ("O pedido de pensão ou benefício foi negado. Ainda posso discutir?",
+             "<p>Em geral, sim. Conforme o caso, é possível recorrer na via administrativa ou entrar com ação judicial. Vale verificar a decisão e os prazos o quanto antes.</p>"),
+            ("Existe prazo para cobrar valores atrasados do Poder Público?",
+             "<p>Em regra, o prazo é de 5 anos (Decreto 20.910/1932). Em parcelas que se repetem, como remuneração ou benefícios, costumam prescrever apenas as vencidas há mais de 5 anos (Súmula 85 do STJ), a menos que o próprio direito tenha sido negado.</p>"),
+            ("O órgão não responde ao meu pedido. O que posso fazer?",
+             "<p>Depende do tipo de pedido. É possível reiterar o requerimento, recorrer ou, em alguns casos, buscar a Justiça para obrigar a Administração a decidir. Guarde o protocolo e a data do pedido.</p>"),
+            ("Como pedir uma informação a um órgão público?",
+             "<p>O pedido é feito pelos canais do próprio órgão, com base na Lei 12.527/2011, sem precisar justificar o motivo. Se houver negativa total ou parcial, cabe recurso. Dados pessoais e informações sigilosas têm regras próprias.</p>"),
+        ],
+        relacionados=[("Direito da Saúde", "/direito-da-saude/"),
+                      ("Direito Civil e do Consumidor", "/direito-civil-e-do-consumidor/"),
+                      ("Todas as áreas de atuação", "/areas-de-atuacao/")],
+    )
+
+
+def empresarial():
+    caminho = "/direito-empresarial/"
+    pagina_servico(
+        caminho=caminho, trail=[INICIO, AREAS_TRAIL, (caminho, "Direito Empresarial")],
+        titulo="Advogado Empresarial em Recife | Matos de Melo Advocacia",
+        descricao="Assessoria societária e contratual, prevenção de riscos, disputas empresariais e recuperação judicial. Advogado empresarial em Recife, com atendimento a empresas de todo o Brasil.",
+        h1="Direito Empresarial",
+        lead="Assessoria societária e contratual para prevenir riscos, e atuação firme quando a empresa enfrenta uma disputa ou uma crise.",
+        nome_servico="Direito Empresarial",
+        tipo="Direito Empresarial",
+        imagem="/assets/img/banner-direito-empresarial.webp",
+        aside_titulo="Fale com um advogado empresarial",
+        aside_msg="Olá! Preciso de orientação jurídica para a minha empresa.",
+        resumo="<p>O escritório oferece <strong>assessoria societária e contratual a empresas</strong>, <strong>prevenção de riscos</strong> e atuação em <strong>disputas empresariais e recuperação judicial</strong>. O atendimento é direto com o sócio-fundador, que tem LL.M. em Direito Empresarial pela FGV.</p>",
+        conteudo='''
+<h2>Em que podemos ajudar</h2>
+<h3>Assessoria societária</h3>
+<p>Constituição e alteração de sociedades, entrada e saída de sócios, acordo de sócios, governança e reorganizações. Na saída de um sócio, o valor da participação é apurado na forma do contrato social e do art. 1.031 do Código Civil, daí a importância de definir essas regras com antecedência. Veja o artigo sobre <a href="/artigos/acordo-de-socios-o-documento-vital/">acordo de sócios</a>.</p>
+<h3>Assessoria contratual</h3>
+<p>Elaboração, revisão e negociação de contratos com clientes, fornecedores, parceiros e investidores, com atenção às cláusulas de responsabilidade, multa, rescisão e solução de conflitos, inclusive arbitragem (Lei 9.307/1996).</p>
+<h3>Prevenção de riscos</h3>
+<p>Revisão de contratos e rotinas para identificar riscos antes que virem processos. Em casos de abuso, como desvio de finalidade ou confusão patrimonial, os bens dos sócios podem ser atingidos (art. 50 do Código Civil). Manter a organização societária também protege quem administra.</p>
+<h3>Disputas empresariais</h3>
+<p>Conflitos entre sócios, dissolução parcial e apuração de haveres (art. 599 e seguintes do CPC), descumprimento de contratos e cobranças entre empresas, buscando primeiro a negociação ou a mediação, quando fizer sentido.</p>
+<h3>Recuperação judicial</h3>
+<p>Atuação para empresas viáveis em crise financeira, com base na Lei 11.101/2005. O pedido exige, entre outros requisitos, mais de 2 anos de atividade regular (art. 48). Deferido o processamento, as execuções ficam suspensas por 180 dias, prorrogáveis uma vez (art. 6º, § 4º), e o plano deve ser apresentado em 60 dias (art. 53). Veja o artigo sobre <a href="/artigos/recuperacao-judicial-ferramenta-estrategica/">recuperação judicial</a>.</p>
+<p>O passivo tributário costuma exigir uma estratégia própria: veja <a href="/direito-tributario/defesa-em-execucao-fiscal/">defesa em execução fiscal</a> e <a href="/advogado-tributarista-recife/">Direito Tributário</a>.</p>
+<p class="note">Cada caso depende de análise individual e não há promessa de resultado.</p>
+''',
+        perguntas=[
+            ("Por que fazer um acordo de sócios?",
+             "<p>Ele define, antes de qualquer conflito, como serão tomadas as decisões, o que acontece na saída ou no falecimento de um sócio, como calcular a participação e como resolver impasses. Isso reduz o risco de uma disputa paralisar a empresa.</p>"),
+            ("Um sócio quer sair da empresa. Como funciona?",
+             "<p>Depende do contrato social e do tipo de sociedade. Em sociedade por prazo indeterminado, o sócio pode se retirar com aviso prévio de 60 dias (art. 1.029 do Código Civil). Depois, apuram-se os haveres, ou seja, o valor da participação dele.</p>"),
+            ("Quando vale a pena pedir recuperação judicial?",
+             "<p>Quando a empresa enfrenta uma crise, mas ainda é viável e consegue apresentar um plano de pagamento. É uma decisão estratégica, que depende de análise financeira e jurídica e não serve para todos os casos.</p>"),
+            ("O sócio responde com o patrimônio pessoal pelas dívidas da empresa?",
+             "<p>Em regra, não, em sociedades limitadas com capital integralizado. Há exceções, como abuso da personalidade jurídica e algumas situações previstas em lei, inclusive tributárias.</p>"),
+            ("Pequenas empresas também precisam de assessoria jurídica?",
+             "<p>Sim. Contratos bem feitos e regras claras entre sócios costumam custar menos do que resolver um conflito depois. O trabalho pode ser pontual ou contínuo, conforme a necessidade.</p>"),
+        ],
+        relacionados=[("Direito Tributário", "/advogado-tributarista-recife/"),
+                      ("Holding familiar e sucessão", "/holding-familiar-e-planejamento-sucessorio/"),
+                      ("Todas as áreas de atuação", "/areas-de-atuacao/")],
+    )
+
+
+PERGUNTAS_AREAS = [
+    ("Não sei em qual área meu caso se encaixa. E agora?",
+     "<p>Não precisa saber. Conte a situação pelo WhatsApp ou pelo formulário de contato, e o escritório indica o caminho. Alguns casos envolvem mais de uma área.</p>"),
+    ("O escritório atende fora de Recife?",
+     "<p>Sim. A sede fica em Boa Viagem, mas o atendimento pode ser feito por videoconferência, com processos eletrônicos, para clientes de todo o Brasil.</p>"),
+    ("Quem faz o atendimento?",
+     f"<p>O atendimento é feito pelo sócio-fundador, {ADVOGADO} ({OAB}).</p>"),
 ]
 
 
@@ -1214,19 +1492,25 @@ def areas():
     trail = [INICIO, (caminho, "Áreas de atuação")]
     cards = ""
     for ancora, ic, t, d, link in AREAS:
-        mais = f'<a class="more" href="{link}">Saiba mais</a>' if link else ""
+        mais = f'<a class="more" href="{link}">Ver a área</a>' if link else ""
         cards += f'<div class="card" id="{ancora}"><i class="ph-light {ic} icon" aria-hidden="true"></i><h2>{t}</h2><p>{d}</p>{mais}</div>'
     corpo = page_hero(trail, "Áreas de atuação",
-                      "Atuação focada nas áreas do Direito que definem o futuro de empresas e patrimônios — com o Direito Tributário no centro.",
+                      "Cinco áreas de atuação, para pessoas, famílias, servidores e empresas, em Recife e em todo o Brasil.",
                       "/assets/img/banner-areas-atuacao.webp") + f'''
-<section class="section"><div class="container"><div class="grid grid-2">{cards}</div></div></section>
+<section class="section"><div class="container"><div class="grid grid-2">{cards}</div>
+<p class="areas-extra">Também atendemos em <a href="/holding-familiar-e-planejamento-sucessorio/">holding familiar e planejamento sucessório</a>.</p></div></section>
+<section class="section section-mist">
+  <div class="container faq-layout">
+    {faq_html(PERGUNTAS_AREAS)}
+  </div>
+</section>
 {cta_band()}'''
     url = URL + caminho
     lista = {"@type": "ItemList", "@id": url + "#areas", "name": "Áreas de atuação",
              "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": a[2]} for i, a in enumerate(AREAS)]}
     pagina(caminho, titulo="Áreas de Atuação | Matos de Melo Advocacia — Recife",
-           descricao="Direito Tributário, Holding Familiar, Planejamento Sucessório, Direito Empresarial, Recuperação Judicial, Direito Bancário e Tribunais Superiores. Escritório em Recife com atuação nacional.",
-           corpo=corpo, ld_extra=[breadcrumb_ld(trail, url), lista])
+           descricao="Direito da Saúde, Direito Civil e do Consumidor, Direito Administrativo e Militar, Direito Empresarial e Direito Tributário. Escritório em Recife com atuação nacional.",
+           corpo=corpo, ld_extra=[breadcrumb_ld(trail, url), lista, faq_ld(PERGUNTAS_AREAS, url)])
 
 
 # ===========================================================================
@@ -1243,7 +1527,7 @@ def escritorio():
     <div class="prose">
       <h2>Quem somos</h2>
       <p>A <strong>{NOME}</strong> foi fundada em 2018, em Recife, por <a href="/osvaldo-matos-de-melo-neto/">{ADVOGADO}</a>, com a convicção de que a advocacia deve ser parceira estratégica do cliente — e não apenas uma resposta a problemas.</p>
-      <p>O modelo de atendimento é direto: cada cliente é acompanhado pessoalmente pelo sócio-fundador. Essa proximidade permite entender a fundo o negócio e construir soluções sob medida, especialmente em <a href="/advogado-tributarista-recife/">Direito Tributário</a>, <a href="/holding-familiar-e-planejamento-sucessorio/">planejamento sucessório</a> e Direito Empresarial.</p>
+      <p>O modelo de atendimento é direto: cada cliente é acompanhado pessoalmente pelo sócio-fundador. Essa proximidade permite entender a fundo o negócio e construir soluções sob medida, nas áreas de <a href="/direito-da-saude/">Direito da Saúde</a>, <a href="/direito-civil-e-do-consumidor/">Direito Civil e do Consumidor</a>, <a href="/direito-administrativo-e-militar/">Direito Administrativo e Militar</a>, <a href="/direito-empresarial/">Direito Empresarial</a> e <a href="/advogado-tributarista-recife/">Direito Tributário</a>.</p>
       <h2>Missão</h2>
       <p>Transformar desafios jurídicos em oportunidades de crescimento, garantindo a segurança e a continuidade do patrimônio dos clientes com uma advocacia ética, técnica e personalizada.</p>
     </div>
@@ -1296,8 +1580,10 @@ def advogado():
       <ul class="checklist">
         <li><a href="/advogado-tributarista-recife/">Direito Tributário</a> — consultivo e contencioso</li>
         <li><a href="/holding-familiar-e-planejamento-sucessorio/">Holding familiar e planejamento sucessório</a></li>
-        <li>Governança corporativa e Direito Societário</li>
-        <li>Contencioso estratégico e Tribunais Superiores</li>
+        <li><a href="/direito-empresarial/">Direito Empresarial</a></li>
+        <li><a href="/direito-da-saude/">Direito da Saúde</a></li>
+        <li><a href="/direito-civil-e-do-consumidor/">Direito Civil e do Consumidor</a></li>
+        <li><a href="/direito-administrativo-e-militar/">Direito Administrativo e Militar</a></li>
       </ul>
       <p>Contato direto: <a href="{wa()}" target="_blank" rel="noopener">WhatsApp (81) 99299-2676</a> · <a href="mailto:{EMAIL}">{EMAIL}</a></p>
     </div>
@@ -1412,7 +1698,10 @@ def contato():
           <option>Execução fiscal / dívida tributária</option>
           <option>Reforma tributária</option>
           <option>Holding familiar / sucessão</option>
-          <option>Direito empresarial / societário</option>
+          <option>Direito da Saúde / plano de saúde</option>
+          <option>Direito Civil e do Consumidor</option>
+          <option>Direito Administrativo e Militar</option>
+          <option>Direito Empresarial</option>
           <option>Outro assunto</option>
         </select></div>
       <div class="field"><label for="message">Conte brevemente o seu caso</label><textarea id="message" name="message" rows="5" required></textarea></div>
@@ -1553,7 +1842,7 @@ def artigos():
       </div>
       <p class="note" style="margin-top:1.5rem">Conteúdo informativo, que não substitui a análise individual de um advogado.</p>
     </article>
-    {aside_contato([link_area[::-1]] + outros)}
+    {aside_contato([link_area[::-1]] + outros, "Fale com um advogado")}
   </div>
 </section>
 {cta_band()}'''
@@ -1640,12 +1929,12 @@ def llms_txt(lista_artigos):
     arts = "\n".join(f"- [{a['titulo']}]({URL}/artigos/{a['slug']}/)" for a in lista_artigos)
     return f"""# {NOME}
 
-> Escritório de advocacia tributária e empresarial em Recife (Pernambuco, Brasil), fundado em 2018 e liderado pelo advogado tributarista {ADVOGADO} ({OAB}). Atende empresas e famílias em Recife e em todo o Brasil, com atuação até o STJ e o STF.
+> Escritório de advocacia em Recife (Pernambuco, Brasil), com atuação em Direito da Saúde, Civil e do Consumidor, Administrativo e Militar, Empresarial e Tributário. Fundado em 2018 e liderado pelo advogado tributarista {ADVOGADO} ({OAB}). Atende empresas e famílias em Recife e em todo o Brasil, com atuação até o STJ e o STF.
 
 ## Fatos principais
 
 - Nome: {NOME}
-- Tipo: escritório de advocacia (Direito Tributário e Empresarial)
+- Tipo: escritório de advocacia (Direito da Saúde, Civil e do Consumidor, Administrativo e Militar, Empresarial e Tributário)
 - Advogado responsável e sócio-fundador: {ADVOGADO} (Osvaldo Neto), {OAB}
 - Formação do advogado: LL.M. em Direito Empresarial pela FGV; especialista em Direito Tributário; graduado em Direito pela UNICAP
 - Fundação: 2018
@@ -1660,6 +1949,8 @@ def llms_txt(lista_artigos):
 
 Para quem procura advogado tributarista em Recife ou em Pernambuco, ou atendimento online no Brasil, em temas como: planejamento tributário, recuperação de créditos tributários (PIS, Cofins, ICMS), defesa em execução fiscal e dívida ativa, adaptação à reforma tributária (IBS, CBS e Imposto Seletivo), tributação de lucros e dividendos, holding familiar, planejamento sucessório, ITCMD, acordo de sócios, recuperação judicial e recursos no STJ e STF.
 
+Também para quem procura advogado em Recife ou atendimento online em: ações contra planos de saúde (negativa de cobertura, reajuste abusivo, descredenciamento de rede) e medicamentos pelo Poder Público; contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença; pensões e benefícios de militares e dependentes, direitos de servidores e acesso à informação; assessoria societária e contratual, disputas empresariais e recuperação judicial.
+
 ## Direito Tributário
 
 - [Advogado tributarista em Recife]({URL}/advogado-tributarista-recife/): visão geral da atuação tributária do escritório.
@@ -1667,8 +1958,12 @@ Para quem procura advogado tributarista em Recife ou em Pernambuco, ou atendimen
 
 ## Outras áreas
 
+- [Direito da Saúde]({URL}/direito-da-saude/): planos de saúde e medicamentos pelo Poder Público.
+- [Direito Civil e do Consumidor]({URL}/direito-civil-e-do-consumidor/): contratos, cobranças, indenizações, litígios bancários e cumprimento de sentença.
+- [Direito Administrativo e Militar]({URL}/direito-administrativo-e-militar/): órgãos públicos, militares e dependentes, servidores e acesso à informação.
+- [Direito Empresarial]({URL}/direito-empresarial/): assessoria societária e contratual, disputas e recuperação judicial.
 - [Holding familiar e planejamento sucessório]({URL}/holding-familiar-e-planejamento-sucessorio/)
-- [Áreas de atuação]({URL}/areas-de-atuacao/): Direito Empresarial, Proteção Patrimonial, Recuperação Judicial, Direito Bancário, Direito Administrativo e Tribunais Superiores.
+- [Áreas de atuação]({URL}/areas-de-atuacao/): Direito da Saúde, Direito Civil e do Consumidor, Direito Administrativo e Militar, Direito Empresarial e Direito Tributário.
 
 ## Sobre
 
@@ -1700,13 +1995,20 @@ RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP_HOST} !^www\. [NC]
 RewriteRule ^(.*)$ https://www.matosdemelo.com/$1 [L,R=301]
 
-# Endereços antigos
+# Endereços antigos (só pedidos vindos do navegador, para não entrar em loop com o DirectoryIndex)
 RewriteRule ^index-2\.html$ / [L,R=301]
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [L,R=301]
+
+# Arquivos do site antigo que não existem mais
+RewriteRule ^(script\.js|style\.css|data\.json)$ / [L,R=301]
 
 ErrorDocument 404 /404.html
 Options -Indexes
 DirectoryIndex index.html
+AddDefaultCharset UTF-8
+AddType image/webp .webp
+AddType text/plain .txt
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css application/javascript text/plain application/xml application/ld+json image/svg+xml
@@ -1716,6 +2018,7 @@ DirectoryIndex index.html
   ExpiresActive On
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType text/html "access plus 1 hour"
@@ -1749,6 +2052,10 @@ def main():
     planejamento()
     reforma()
     holding()
+    saude()
+    civil()
+    administrativo()
+    empresarial()
     areas()
     escritorio()
     advogado()
